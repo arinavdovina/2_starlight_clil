@@ -1,0 +1,2079 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Методический портал: Starlight 2</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary:     #7a1e1e;
+      --primary-dark:#5a1010;
+      --secondary:   #b84040;
+      --accent:      #c8773a;
+      --accent-light:#e8a96a;
+      --beige:       #f5ede0;
+      --beige-mid:   #ede0cc;
+      --beige-dark:  #d9c4a8;
+      --cream:       #fdf8f2;
+      --white:       #ffffff;
+      --border:      #d9c4a8;
+      --text:        #2c1a0e;
+      --text-light:  #6b4c35;
+      --shadow-sm:   0 2px 8px rgba(122,30,30,0.08);
+      --shadow-md:   0 6px 24px rgba(122,30,30,0.12);
+      --shadow-lg:   0 16px 48px rgba(122,30,30,0.16);
+    }
+    html { scroll-behavior: smooth; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      line-height: 1.75;
+      background-color: var(--beige);
+      color: var(--text);
+      margin: 0;
+    }
+    header {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--secondary) 100%);
+      color: white;
+      padding: 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(200,119,58,0.25) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 30%, rgba(255,255,255,0.06) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .header-inner {
+      position: relative;
+      z-index: 1;
+      padding: 4rem 2rem 3.5rem;
+    }
+    .header-eyebrow {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 0.75rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 1rem;
+      display: block;
+    }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      margin: 0 0 0.25rem;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: 1px;
+      line-height: 1.1;
+    }
+    header h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: clamp(0.9rem, 2vw, 1.2rem);
+      margin: 0.5rem 0 1.25rem;
+      opacity: 0.85;
+      letter-spacing: 1px;
+    }
+    .tagline {
+      font-size: 0.9rem;
+      opacity: 0.75;
+      font-style: italic;
+      margin-bottom: 1.5rem;
+      font-family: 'Playfair Display', serif;
+    }
+    .info-badges { margin-top: 1rem; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+    .info-badges span {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 6px 20px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      backdrop-filter: blur(8px);
+    }
+    .header-ornament {
+      width: 100%;
+      height: 60px;
+      background: var(--beige);
+      clip-path: ellipse(55% 100% at 50% 100%);
+      margin-top: -1px;
+    }
+    .main-container {
+      max-width: 1280px;
+      margin: 0 auto 60px;
+      background: var(--cream);
+      padding: 40px 48px 56px;
+      border-radius: 0 0 16px 16px;
+      box-shadow: var(--shadow-lg);
+    }
+    .tabs-navigation {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 44px;
+      padding-bottom: 0;
+      position: relative;
+    }
+    .tabs-navigation::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--beige-dark), transparent);
+    }
+    .tab-link {
+      padding: 10px 18px;
+      border: 1.5px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-light);
+      letter-spacing: 0.5px;
+      border-radius: 8px 8px 0 0;
+      transition: all 0.25s ease;
+      text-transform: uppercase;
+    }
+    .tab-link:hover {
+      color: var(--primary);
+      background: var(--beige);
+      border-color: var(--beige-dark);
+    }
+    .tab-link.active {
+      color: var(--primary);
+      background: var(--cream);
+      border-color: var(--beige-dark);
+      border-bottom-color: var(--cream);
+      box-shadow: var(--shadow-sm);
+    }
+    .tab-content { display: none; }
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--primary);
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+      position: relative;
+      display: inline-block;
+    }
+    h3::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-light), transparent);
+      border-radius: 2px;
+    }
+    h4 {
+      color: var(--secondary);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-top: 28px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    h5 {
+      color: var(--primary);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+    }
+    p, li { font-size: 0.95rem; }
+    strong { color: var(--primary-dark); }
+    .content-block { margin-bottom: 54px; }
+    .table-container { overflow-x: auto; margin: 20px 0; }
+    .caption { font-style: italic; font-size: 0.85rem; color: var(--text-light); margin-bottom: 6px; }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    th, td { padding: 14px 16px; border: 1px solid var(--border); text-align: left; font-size: 0.88rem; }
+    th {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    tr:nth-child(even) td { background-color: var(--beige); }
+    tr:hover td { background-color: #f5e8d8; transition: background 0.2s; }
+    .clil-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-top: 20px; }
+    .clil-card {
+      background: linear-gradient(135deg, var(--beige) 0%, var(--cream) 100%);
+      padding: 20px;
+      border-left: 5px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      box-shadow: var(--shadow-sm);
+    }
+    .clil-card h5 { margin: 0 0 8px; color: var(--primary); font-size: 0.9rem; }
+    .e5-visual {
+      display: flex;
+      justify-content: space-around;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--secondary));
+      padding: 20px 28px;
+      border-radius: 60px;
+      color: white;
+      font-weight: 700;
+      font-family: 'Montserrat', sans-serif;
+      margin: 28px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      box-shadow: var(--shadow-md);
+    }
+    .e5-visual span { opacity: 0.9; }
+    .e5-visual span:hover { opacity: 1; letter-spacing: 2px; transition: letter-spacing 0.2s; }
+    .rec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .rec-item {
+      background: var(--beige);
+      border: 1px solid var(--border);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .glossary-list dt { font-weight: 700; color: var(--accent); margin-top: 16px; font-size: 1rem; }
+    .glossary-list dd { margin-left: 20px; color: var(--text-light); }
+    .module-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 36px;
+      padding: 36px 30px 30px;
+      background: linear-gradient(135deg, var(--beige) 0%, var(--cream) 100%);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    .module-header::before {
+      content: '';
+      position: absolute;
+      top: -30px; right: -30px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,119,58,0.15) 0%, transparent 70%);
+    }
+    .module-header h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--primary);
+      font-size: clamp(1.3rem, 3vw, 2rem);
+      margin-bottom: 20px;
+      font-weight: 700;
+      position: relative;
+    }
+    .action-buttons { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+    .btn {
+      display: inline-block;
+      padding: 12px 26px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      transition: all 0.28s ease;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      border: none;
+    }
+    .btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .btn-pdf { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
+    .btn-materials { background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: white; }
+    .objectives-block { margin-bottom: 40px; }
+    .objectives-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-top: 14px; }
+    .obj-card {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--accent);
+      border-radius: 0 0 10px 10px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .obj-card h4 { margin-top: 0; color: var(--secondary); border-bottom: 1px solid var(--beige-dark); padding-bottom: 8px; }
+    .obj-card ul { padding-left: 18px; margin-bottom: 0; }
+    .stage-block { margin-bottom: 44px; }
+    .stage-title {
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: white;
+      margin-bottom: 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .stage-engage   { background: linear-gradient(135deg, #c07a1a, #d4952e); }
+    .stage-explore  { background: linear-gradient(135deg, #1a6fa0, #2b8ec5); }
+    .stage-explain  { background: linear-gradient(135deg, #7a2d94, #9b47b2); }
+    .stage-elaborate{ background: linear-gradient(135deg, #178068, #24a888); }
+    .stage-evaluate { background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+    .time-col {
+      white-space: nowrap;
+      font-weight: 700;
+      color: var(--primary);
+      background-color: var(--beige);
+      width: 110px;
+      font-size: 0.82rem;
+    }
+    .materials-block {
+      margin-top: 56px;
+      padding-top: 32px;
+      border-top: 3px dashed var(--beige-dark);
+      text-align: center;
+    }
+    .materials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-top: 28px;
+    }
+    .materials-grid img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: zoom-in;
+    }
+    .materials-grid img:hover { transform: scale(1.04); box-shadow: var(--shadow-lg); }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(60,10,10,0.88);
+      backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 10px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      animation: zoomIn 0.3s ease;
+      object-fit: contain;
+    }
+    .close-modal {
+      position: absolute;
+      top: 20px; right: 40px;
+      color: var(--accent-light);
+      font-size: 50px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .close-modal:hover { color: white; }
+    @keyframes zoomIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    #module-diagnostics input[type="text"],
+    #module-diagnostics input[type="date"],
+    #module-diagnostics input[type="number"],
+    #module-diagnostics select,
+    #module-diagnostics textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.85rem;
+      margin-top: 4px;
+      background: var(--cream);
+      color: var(--text);
+      transition: border-color 0.2s;
+    }
+    #module-diagnostics input:focus,
+    #module-diagnostics select:focus,
+    #module-diagnostics textarea:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(184,64,64,0.1);
+    }
+    #module-diagnostics textarea { resize: vertical; min-height: 64px; }
+    #module-diagnostics .rating-scale { display: flex; gap: 10px; margin-top: 10px; }
+    #module-diagnostics .rating-option {
+      flex: 1;
+      text-align: center;
+      padding: 14px 8px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--beige);
+      font-size: 0.82rem;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+    }
+    #module-diagnostics .rating-option:hover { border-color: var(--secondary); background: #f9e8e0; }
+    #module-diagnostics .info-box {
+      background: #f9ede0;
+      border-left: 4px solid var(--accent);
+      padding: 16px;
+      margin: 18px 0;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
+    }
+    #module-diagnostics .warning-box {
+      background: #fdf5e0;
+      border-left: 4px solid #c8a030;
+      padding: 16px;
+      margin: 18px 0;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
+    }
+    #module-diagnostics .level-badge {
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-weight: 700;
+      color: white;
+      font-size: 0.85rem;
+      display: inline-block;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .badge-v { background: #7f8c8d; }
+    .badge-u { background: #2980b9; }
+    .badge-i { background: #27ae60; }
+    .badge-e { background: var(--accent); }
+    @media (max-width: 768px) {
+      .main-container { padding: 20px 16px 36px; }
+      .rec-grid { grid-template-columns: 1fr; }
+      .tab-link { font-size: 0.72rem; padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <span class="header-eyebrow">Starlight 2 · 2025–2026</span>
+      <h1>Методический Гайд</h1>
+      <h2>для преподавателей английского языка</h2>
+      <p class="tagline">Интеграция CLIL, 4К-компетенций и модели 5E</p>
+      <div class="info-badges">
+        <span>2 КЛАСС</span>
+        <span>Начальная школа</span>
+        <span>2025–2026 уч. год</span>
+      </div>
+    </div>
+    <div class="header-ornament"></div>
+  </header>
+
+  <div class="main-container">
+    <nav class="tabs-navigation">
+      <button class="tab-link active" onclick="openTab(event, 'full-guide')">Методический гайд</button>
+      <button class="tab-link" onclick="openTab(event, 'module-starter')">Starter</button>
+      <button class="tab-link" onclick="openTab(event, 'module-1')">Модуль 1</button>
+      <button class="tab-link" onclick="openTab(event, 'module-2')">Модуль 2</button>
+      <button class="tab-link" onclick="openTab(event, 'module-3')">Модуль 3</button>
+      <button class="tab-link" onclick="openTab(event, 'module-4')">Модуль 4</button>
+      <button class="tab-link" onclick="openTab(event, 'module-5')">Модуль 5</button>
+      <button class="tab-link" onclick="openTab(event, 'module-6')">Модуль 6</button>
+      <button class="tab-link" onclick="openTab(event, 'module-7')">Модуль 7</button>
+      <button class="tab-link" onclick="openTab(event, 'module-8')">Модуль 8</button>
+      <button class="tab-link" onclick="openTab(event, 'module-diagnostics')">Диагностика</button>
+    </nav>
+
+    <!-- ==================== МЕТОДИЧЕСКИЙ ГАЙД ==================== -->
+    <article id="full-guide" class="tab-content active">
+      <section class="content-block">
+        <h3>1. Введение</h3>
+        <p>Данный методический гайд разработан для преподавателей английского языка, работающих со второклассниками. Он объединяет три ключевых педагогических подхода: CLIL, развитие 4К-компетенций и модель педагогического дизайна 5E — в единую практическую систему.</p>
+        <h4>1.1. Актуальность метапредметного подхода</h4>
+        <p>Современное образование смещает акцент с трансляции знаний на формирование универсальных учебных умений. Английский язык во 2 классе — не просто предмет, а среда для развития мышления, общения и сотрудничества. Метапредметный подход позволяет связать языковое обучение с реальным опытом ребёнка.</p>
+        <h4>1.2. Возрастные особенности учеников 2 класса</h4>
+        <p>Второклассники (7–8 лет) обладают рядом характеристик, которые необходимо учитывать при проектировании урока:</p>
+        <ul>
+          <li><strong>Доминирует наглядно-образное мышление;</strong> абстракции усваиваются через конкретные образы.</li>
+          <li><strong>Произвольное внимание развито недостаточно</strong> — смена активностей каждые 5–7 минут.</li>
+          <li><strong>Высокая мотивация</strong> через игру, движение и социальное взаимодействие.</li>
+          <li><strong>Активное освоение фонетики</strong> и базовой лексики; готовность к простым диалогам.</li>
+          <li><strong>Потребность в одобрении</strong> и безопасной языковой среде без страха ошибиться.</li>
+        </ul>
+        <h4>1.3. Роль компетентностного подхода</h4>
+        <p>Компетентностный подход предполагает, что результатом обучения является не набор знаний, а способность применять их в реальных ситуациях. На уроках английского это означает: ученик не только знает слова, но умеет ими пользоваться — задавать вопросы, описывать, рассуждать и создавать.</p>
+      </section>
+
+      <section class="content-block">
+        <h3>2. 4К-Компетенции в обучении английскому языку</h3>
+        <p>4К — это четыре ключевые компетенции XXI века: критическое мышление (Critical thinking), креативность (Creativity), коммуникация (Communication) и кооперация (Collaboration).</p>
+        <div class="table-container">
+          <p class="caption">Таблица 1. 4К-компетенции: определение, проявление и приёмы развития</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Компетенция</th><th>Определение</th><th>Проявление у детей 2 кл.</th><th>Приёмы развития</th><th>Примеры заданий</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Критическое мышление</strong></td>
+                <td>Способность анализировать, сравнивать, задавать уточняющие вопросы и обосновывать выводы.</td>
+                <td>Задаёт вопросы «Почему?», сравнивает предметы, выдвигает гипотезы (It looks like…).</td>
+                <td>Задания на классификацию, сортировку, поиск «лишнего». Вопросы открытого типа.</td>
+                <td>Odd one out, True/False с обоснованием, сортировка карточек.</td>
+              </tr>
+              <tr>
+                <td><strong>Креативность</strong></td>
+                <td>Способность создавать новые идеи, находить нестандартные решения, выражать себя.</td>
+                <td>Придумывает названия, дорисовывает, предлагает варианты. Включается в ролевые игры.</td>
+                <td>Открытые творческие задания, Story cubes, создание мини-проекта.</td>
+                <td>Draw and describe, Create your monster, Design a menu.</td>
+              </tr>
+              <tr>
+                <td><strong>Коммуникация</strong></td>
+                <td>Умение ясно выражать мысли устно и письменно, слушать и понимать собеседника.</td>
+                <td>Отвечает на вопросы учителя, описывает картинку, участвует в диалоге.</td>
+                <td>Парная работа, sentence starters, language frames, Show and Tell.</td>
+                <td>Describe the picture, Interview a partner, My favourite…</td>
+              </tr>
+              <tr>
+                <td><strong>Кооперация</strong></td>
+                <td>Способность работать в команде: слушать других, распределять роли, достигать общего результата.</td>
+                <td>Берёт на себя роль, помогает партнёру, договаривается об ответе.</td>
+                <td>Групповые проекты, ролевые игры, jigsaw-активности.</td>
+                <td>Group poster, Team quiz, Role play in a shop.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="content-block">
+        <h3>3. Подход CLIL</h3>
+        <p>CLIL (Content and Language Integrated Learning) — это педагогический подход, при котором иностранный язык используется одновременно как цель и как инструмент изучения предметного содержания.</p>
+        <h4>3.1. Принципы CLIL</h4>
+        <div class="clil-grid">
+          <div class="clil-card"><h5>CONTENT (Содержание)</h5><p>Предметные знания, темы и понятия из реального мира (животные, цвета, числа, природа).</p></div>
+          <div class="clil-card"><h5>COMMUNICATION (Коммуникация)</h5><p>Язык как инструмент: говорить, читать и слушать для достижения цели.</p></div>
+          <div class="clil-card"><h5>COGNITION (Познание)</h5><p>Задания на мышление высокого порядка: анализ, синтез, оценка.</p></div>
+          <div class="clil-card"><h5>CULTURE (Культура)</h5><p>Расширение кругозора: праздники, традиции, сравнение «у нас и у них».</p></div>
+        </div>
+        <h4>3.2. Применение CLIL во 2 классе</h4>
+        <ul>
+          <li>Использование визуальных стимулов (картинки, видео) для говорения.</li>
+          <li>Биологический уклон: изучение питания и среды обитания животных.</li>
+          <li>Математика: счет, сортировка и сравнение величин на английском.</li>
+          <li>Окружающий мир: «Seasons &amp; Weather» с картами и наблюдениями.</li>
+        </ul>
+      </section>
+
+      <section class="content-block">
+        <h3>4. Модель педагогического дизайна 5E</h3>
+        <div class="e5-visual">
+          <span>⚡ ENGAGE</span><span>🔍 EXPLORE</span><span>💡 EXPLAIN</span><span>🚀 ELABORATE</span><span>✅ EVALUATE</span>
+        </div>
+        <div class="table-container">
+          <p class="caption">Таблица 2. Этапы модели 5E</p>
+          <table>
+            <thead>
+              <tr><th>Этап 5E</th><th>Что делает учитель</th><th>Что делает ученик</th><th>Результат</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Engage (Вовлечение)</strong></td><td>Задаёт проблемный вопрос, показывает видео, создаёт интригу.</td><td>Смотрит, слушает, делится своим опытом.</td><td>Любопытство, интерес к теме.</td></tr>
+              <tr><td><strong>Explore (Исследование)</strong></td><td>Организует групповую работу, наблюдение. Минимально вмешивается.</td><td>Исследует, сортирует, обсуждает с партнёром.</td><td>Первичное понимание через опыт.</td></tr>
+              <tr><td><strong>Explain (Объяснение)</strong></td><td>Вводит термины и структуры через mind maps, sentence frames.</td><td>Объясняет своими словами, использует новые слова.</td><td>Осознанное усвоение концепций.</td></tr>
+              <tr><td><strong>Elaborate (Расширение)</strong></td><td>Предлагает новый контекст или мини-проект.</td><td>Переносит знания на новую ситуацию, создаёт продукт.</td><td>Глубокое понимание, применение 4К.</td></tr>
+              <tr><td><strong>Evaluate (Оценка)</strong></td><td>Проводит Finger Reflection, Exit ticket.</td><td>Оценивает себя и партнёра, формулирует выводы.</td><td>Рефлексия, обратная связь.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="content-block">
+        <h3>5. Проектирование урока (Шаблон: Wild Animals)</h3>
+        <div class="table-container">
+          <p class="caption">Таблица 3. Шаблон урока: Wild Animals (45 мин.)</p>
+          <table>
+            <thead>
+              <tr><th>Этап</th><th>Цель</th><th>Деятельность учителя</th><th>Деятельность учеников</th><th>CLIL / 4К</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Engage</strong></td><td>Пробудить интерес.</td><td>Видео «Animal Sounds». Вопросы: Where does it live?</td><td>Угадывают звуки, называют животных.</td><td>Коммуникация.</td></tr>
+              <tr><td><strong>Explore</strong></td><td>Категоризация.</td><td>Инструкция: Sort the animals — jungle, sea, farm.</td><td>В парах сортируют карточки.</td><td>Крит. мышление, Кооперация.</td></tr>
+              <tr><td><strong>Explain</strong></td><td>Ввод лексики.</td><td>Mind map на доске. Фразы: It lives in... It can...</td><td>Заполняют language frames о животном.</td><td>CLIL: Биология.</td></tr>
+              <tr><td><strong>Elaborate</strong></td><td>Мини-проект.</td><td>Задание: Create an Animal Card.</td><td>В группах создают карточку: рисунок + 3 факта.</td><td>Креативность, Кооперация.</td></tr>
+              <tr><td><strong>Evaluate</strong></td><td>Рефлексия.</td><td>Finger Reflection: 5 пальцев = 5 вопросов.</td><td>Показывают уровень уверенности пальцами.</td><td>Метакогниция.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="content-block">
+        <h3>6. Банк заданий</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr><th>Тип задания</th><th>Описание</th><th>Развиваемые 4К</th><th>Ресурс</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Игровое</td><td><strong>Odd One Out:</strong> 4 карточки, одна лишняя. Обоснование выбора.</td><td>Крит. мышление, Коммуникация</td><td>Карточки</td></tr>
+              <tr><td>Цифровое</td><td><strong>Quizlet Live / Kahoot!:</strong> Командные игры на лексику.</td><td>Кооперация, Коммуникация</td><td>Quizlet / ПК</td></tr>
+              <tr><td>Коммуникативное</td><td><strong>Show and Tell:</strong> Рассказ о своем животном по шаблону.</td><td>Коммуникация, Креативность</td><td>Рисунок</td></tr>
+              <tr><td>Проектное</td><td><strong>Animal Poster:</strong> Плакат группы (рисунок + 5 фактов).</td><td>Все 4К</td><td>Canva / Ватман</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="content-block">
+        <h3>7. Рекомендации преподавателю</h3>
+        <div class="rec-grid">
+          <div class="rec-item">
+            <h5>7.1. Адаптация уровня</h5>
+            <p><strong>Starter:</strong> карточки-подсказки. <strong>Core:</strong> опора на пример. <strong>Extension:</strong> открытые творческие задачи.</p>
+          </div>
+          <div class="rec-item">
+            <h5>7.2. Безопасная среда</h5>
+            <p>Применяйте «no mistake penalty», используйте хоровые ответы и давайте ученикам «Wait time» (5–7 секунд).</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-block">
+        <h3>8. Глоссарий</h3>
+        <dl class="glossary-list">
+          <dt>CLIL</dt><dd>Предметно-языковое интегрированное обучение.</dd>
+          <dt>Scaffolding</dt><dd>Временная поддержка учителя (опорные слова, рамки).</dd>
+          <dt>Exit ticket</dt><dd>Короткое задание в конце урока для самопроверки.</dd>
+        </dl>
+      </section>
+    </article>
+
+    <!-- ==================== STARTER (←— сюда переехало содержимое бывшего Модуля 1) ==================== -->
+    <article id="module-starter" class="tab-content">
+      <div class="module-header">
+        <h2>Lesson Plan 1: Welcome Back! (Starter Unit)</h2>
+        <div class="action-buttons">
+          <a href="#" onclick="generatePDF(event, 'lesson-content-s', 'Lesson_Plan_Starter.pdf')" class="btn btn-pdf">📄 Скачать PDF план урока</a>
+          <a href="#materials-section-s" class="btn btn-materials">🖨️ Дополнительные материалы</a>
+        </div>
+      </div>
+
+      <div id="lesson-content-s">
+        <section class="objectives-block">
+          <h3>🎯 Learning Objectives</h3>
+          <div class="objectives-grid">
+            <div class="obj-card">
+              <h4>Языковые (Language)</h4>
+              <ul>
+                <li>Уметь приветствовать друг друга (Hello, How are you? — I'm fine).</li>
+                <li>Понимать вопрос «What is it?» и отвечать «It's a (cat)».</li>
+                <li>Повторить звуки/буквы (A-Z) через ключевые слова.</li>
+                <li>Счет 1–10.</li>
+              </ul>
+            </div>
+            <div class="obj-card">
+              <h4>Предметные (CLIL)</h4>
+              <ul>
+                <li><strong>Maths:</strong> Соотнесение количества предметов с цифрой.</li>
+                <li><strong>Art:</strong> Распознавание цвета и инструкции по раскрашиванию.</li>
+              </ul>
+            </div>
+            <div class="obj-card">
+              <h4>Метапредметные &amp; 4К</h4>
+              <ul>
+                <li>Развитие слухового внимания и координации через TPR.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-engage">⚡ STAGE 1: ENGAGE (Вовлечение) — 7 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Методический комментарий (CLIL &amp; 4К)</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 1:30</td><td><strong>Phase 1: Non-verbal Tuning.</strong><br><strong>T:</strong> (Шепотом) Look! I am happy. (Улыбается).<br>Меняет мимику на грустную/злую.</td><td>Молча смотрят на учителя. Копируют мимику и позы.<br><strong>Ss:</strong> (Без слов, только жестами и мимикой показывают радость, грусть, злость).</td><td>Снижение аффективного фильтра. Использование визуальных стимулов.<br><strong>Креативность:</strong> выразительность движений.</td></tr>
+              <tr><td class="time-col">1:30 – 3:30</td><td><strong>Phase 2: TPR &amp; Drilling.</strong><br><strong>T:</strong> How are you today? Happy? Sad?<br><strong>T:</strong> Let's play! Listen! Happy! Freeze!<br><strong>T:</strong> Angry! Freeze!</td><td>Активно двигаются по классу. При команде замирают в позе.<br><strong>Ss:</strong> (Хором) I am happy! / I am sad!<br><strong>Ss:</strong> I am angry!</td><td>TPR (Total Physical Response). Связь кинестетики и лексики.<br><strong>Кооперация:</strong> соблюдение правил игры.<br><strong>CLIL:</strong> Эмоциональный интеллект.</td></tr>
+              <tr><td class="time-col">3:30 – 6:00</td><td><strong>Phase 3: Communicative Interaction.</strong><br>Достает невидимый мяч.<br><strong>T:</strong> Catch the ball! I am happy. And you, Masha? (Имитирует бросок).</td><td><strong>S1:</strong> (Ловит) I am fine! (Смотрит на S2) Petr, how are you? (Бросает).<br><strong>S2:</strong> I am brave! (Смотрит на S3) Lena, how are you?</td><td><strong>Коммуникация.</strong> Отработка Eye Contact.<br><strong>Крит. мышление:</strong> ребенок должен сообразить, кто еще не получал мяч.</td></tr>
+              <tr><td class="time-col">6:00 – 7:00</td><td><strong>Phase 4: Grounding.</strong><br><strong>T:</strong> One, two, three — the ball is gone!<br><strong>T:</strong> Breathe in... and breathe out.<br><strong>T:</strong> Sit down, please. Hands on the desk.</td><td><strong>Ss:</strong> (Повторяют глубокий вдох и выдох).<br><strong>Ss:</strong> (Хором нараспев) One, two, three — I am ready, look at me!<br>Тихо садятся.</td><td>Management &amp; Transition. Ритуал завершения активности.<br><strong>Self-regulation:</strong> переход от возбуждения к концентрации.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-explore">🔍 STAGE 2: EXPLORE (Исследование) — 10 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Методический комментарий (CLIL &amp; 4К)</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Setup: The Muddled Teacher.</strong><br>Чертит зоны. Показывает "B".<br><strong>T:</strong> Look! It's a number! Right?<br>Достает следующую: Is it a letter? Help me!</td><td><strong>Ss:</strong> (Хором) No! Stop!<br><strong>S1:</strong> (Указывает) Letters! It is a letter!<br><strong>Ss:</strong> (Групповой жест согласия/несогласия).</td><td><strong>CLIL (Math):</strong> Категоризация и множества.<br><strong>Крит. мышление:</strong> Верификация данных. Ребенок переходит в позицию эксперта.</td></tr>
+              <tr><td class="time-col">3:00 – 7:00</td><td><strong>TPR Classification: Visual Code.</strong><br>Задает код. Показывает карточку "5".<br><strong>T:</strong> (Сбивает голосом) Clap! (хотя нужно присесть).<br><strong>T:</strong> Look at the card, not at me! Quick, quick!</td><td><strong>Ss:</strong> (Приседают для цифр, хлопают для букв).<br><strong>Ss:</strong> (Если учитель ошибся) No, teacher! It's a number! Sit down!</td><td><strong>Саморегуляция.</strong> Тренировка когнитивного торможения.</td></tr>
+              <tr><td class="time-col">7:00 – 10:00</td><td><strong>Physical Symbols &amp; Peer Check.</strong><br><strong>T:</strong> Show me "X"! Use your arms!<br><strong>T:</strong> Look at your friend. Is it "X"?<br><strong>T:</strong> Ice-cream is melting... melt down to your chairs.</td><td><strong>Ss:</strong> (Изображают "X" руками, "O" телом).<br><strong>Ss:</strong> (Смотрят на соседа) Yes! Good job! (Показывают большой палец).<br>Медленно садятся, имитируя таяние.</td><td><strong>CLIL:</strong> Spatial Awareness. Подготовка к графомоторике.<br><strong>Коммуникация:</strong> Peer Check учит мягко корректировать друг друга.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-explain">💡 STAGE 3: EXPLAIN (Объяснение) — 10 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Методический комментарий (CLIL &amp; 4К)</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 4:00</td><td><strong>Phase 1: Decoding &amp; Prediction.</strong><br>Пишет «A». <strong>T:</strong> The letter is A. The sound is /æ/.<br>Рисует усики. <strong>T:</strong> Look! One leg, two legs... Is it a cat?<br>Дорисовывает: No! It's an Ant! (Жест бегущих пальцев).</td><td><strong>Ss:</strong> (Хором) /æ/ - /æ/ - /æ/<br><strong>S1:</strong> A Spider? <strong>S2:</strong> A Bug?<br><strong>Ss:</strong> (Повторяют жест) An Ant!</td><td><strong>CLIL (Literacy):</strong> Фонемная разминка. Связь звука и символа.<br><strong>Крит. мышление:</strong> Прогнозирование. Мозг в режиме активного поиска.</td></tr>
+              <tr><td class="time-col">4:00 – 7:00</td><td><strong>Phase 2: Multimodal Drilling.</strong><br>Задает ритм (хлопок-хлопок-пауза).<br><strong>T:</strong> (Испуганно) Oh no! What is it?<br><strong>T:</strong> (Радостно) Wow! It's an ant!<br>Ускоряет темп, меняя эмоции: Sad! Angry! Happy!</td><td><strong>Ss:</strong> (В ритм хлопков) What is it? — It's an ant!<br><strong>Ss:</strong> (Меняют голос) Повторяют вопрос испуганным шепотом или радостным криком.</td><td><strong>Коммуникация.</strong> Отработка Intonation patterns.<br><strong>Эмпатия:</strong> Проживание разных состояний.</td></tr>
+              <tr><td class="time-col">7:00 – 10:00</td><td><strong>Phase 3: Team Interaction.</strong><br>Делит класс жестом на 2 группы.<br><strong>T:</strong> You are the Question Team! You are the Answer Team!<br>Стирает картинку: Look! Only letter A. What was it?</td><td><strong>Group A:</strong> (Спрашивают с жестом) What is it?<br><strong>Group B:</strong> (Отвечают) It's an ant!<br><strong>Ss:</strong> Напрягают память, вспоминая образ по одной букве «A».</td><td><strong>Кооперация.</strong> Настройка синхронности.<br>Memory Retrieval: Удаление визуальной опоры заставляет мозг «доставать» слово из памяти.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-elaborate">🚀 STAGE 4: ELABORATE (Разработка / Практика) — 13 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Методический комментарий (CLIL &amp; 4К)</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 2:00</td><td><strong>Phase 1: Concept Check.</strong><br><strong>T:</strong> Show me your pencil! High!<br>Рисует круг. <strong>T:</strong> Is it big or small?<br>Рисует точку. <strong>T:</strong> And this?</td><td><strong>Ss:</strong> (Поднимают карандаши) Pencil! Check!<br><strong>Ss:</strong> (Хором) It is big! / It is small!<br>(Повторяют жесты учителя).</td><td>Classroom Management. Проверка готовности через действие.<br><strong>Concept Checking:</strong> Физическое проживание размера перед рисованием.</td></tr>
+              <tr><td class="time-col">2:00 – 7:00</td><td><strong>Phase 2: Geometric Dictation.</strong><br><strong>T:</strong> Listen! Take a pencil. Draw one BIG circle. In the middle!<br><strong>T:</strong> Draw two SMALL squares on the circle.<br>(Учитель показывает предлог on жестом).</td><td><strong>Ss:</strong> (Рисуют молча, сосредоточенно).<br><strong>S1:</strong> (Шепотом соседу) Small squares? <strong>S2:</strong> Yes, two squares.<br><strong>Ss:</strong> (После показа эталона) Yes! I'm right! / Oh, no!</td><td><strong>CLIL (Maths):</strong> Развитие аудирования без визуальной подсказки.<br><strong>Крит. мышление:</strong> Декодирование абстрактных понятий в визуальный образ.</td></tr>
+              <tr><td class="time-col">7:00 – 11:00</td><td><strong>Phase 3: Logic Coding.</strong><br><strong>T:</strong> Red color! Color the circle RED. Quick! 10, 9, 8...<br><strong>T:</strong> Now, find the squares. Write "A" inside. Inside!<br><strong>T:</strong> Stop! Pencils down!</td><td><strong>Ss:</strong> (Быстро раскрашивают) Red, red, red...<br><strong>Ss:</strong> (Пишут букву) Letter A is in the square!<br><strong>Ss:</strong> (Кладут карандаши, поднимают руки): Done!</td><td>Pacing. Управление импульсами. Ограничение времени приучает к концентрации.<br><strong>CLIL:</strong> Работа по алгоритму.</td></tr>
+              <tr><td class="time-col">11:00 – 13:00</td><td><strong>Phase 4: Peer Assessment.</strong><br><strong>T:</strong> Swap papers! 1, 2, 3 — Swap!<br><strong>T:</strong> Look at the board. Red circle? Square A?<br><strong>T:</strong> Is it OK? Give a High Five to your friend!</td><td><strong>Ss:</strong> (Меняются листами) Here you are. — Thank you.<br><strong>Ss:</strong> (Проверяют соседа): Circle is red. Correct!<br><strong>Ss:</strong> (Возвращают листы) Good job! (Дают «пять»).</td><td><strong>Кооперация.</strong> Взаимопроверка: Смена социальной роли.<br><strong>Социальный интеллект:</strong> Ритуал благодарности и позитивного подкрепления.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-evaluate">✅ STAGE 5: EVALUATE (Оценка) — 5 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Методический комментарий (CLIL &amp; 4К)</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 2:30</td><td><strong>Activity: The Truth Detector.</strong><br><strong>T:</strong> (Указывает на красную B) This is a Number 5. Right?<br><strong>T:</strong> (Указывает на цифру 1) It is a small number. Yes?<br>Учитель играет роль «сломанного робота».</td><td><strong>Ss:</strong> (Скрещивают руки) No! Wrong! It's a letter B!<br><strong>Ss:</strong> (Показывают 👍) Yes! Correct! It is small.<br><strong>S1:</strong> (Исправляет учителя) Not a number! A letter!</td><td><strong>Крит. мышление.</strong> Верификация: сопоставление визуального образа и аудио-сигнала.<br><strong>Self-confidence:</strong> успех в исправлении взрослого повышает мотивацию.</td></tr>
+              <tr><td class="time-col">2:30 – 3:30</td><td><strong>Activity: Finger Reflection.</strong><br><strong>T:</strong> Close your eyes. No peeking!<br><strong>T:</strong> Was it easy? 5 fingers — easy, 1 finger — hard.<br><strong>T:</strong> Show me! (Быстро фиксирует картину).</td><td><strong>Ss:</strong> (Сидят с закрытыми глазами).<br><strong>Ss:</strong> (Поднимают руку с пальцами: кто-то 5, кто-то 2).<br>Чувствуют себя в безопасности.</td><td><strong>Навык рефлексии.</strong> Оценка когнитивного усилия.<br><strong>Metacognition:</strong> осознание того, «как я учился», а не «что я выучил».</td></tr>
+              <tr><td class="time-col">3:30 – 5:00</td><td><strong>Exit Ticket: Rocket Launch.</strong><br><strong>T:</strong> Stand up! Ready for launch?<br><strong>T:</strong> Start the countdown! 10, 9...<br><strong>T:</strong> ZERO! Jump! Goodbye!</td><td><strong>Ss:</strong> (Приседают как ракеты).<br><strong>Ss:</strong> (Громко хором) 10, 9, 8, 7, 6, 5, 4, 3, 2, 1...<br><strong>Ss:</strong> (Прыгают вверх) ZERO! BLAST OFF!<br><strong>Ss:</strong> Goodbye, teacher!</td><td><strong>CLIL (Maths):</strong> Обратный счет.<br>Group Dynamics: Финальный выброс энергии и позитивное закрепление образа урока.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+      </div>
+
+      <div id="materials-section-s" class="materials-block">
+        <h3>🖨️ Дополнительные материалы к уроку (Starter)</h3>
+        <p>Нажмите на любое изображение, чтобы рассмотреть его поближе.</p>
+        <button onclick="printMaterials('materials-gallery-s')" class="btn btn-materials" style="margin-bottom: 20px;">Распечатать все материалы (10 шт.)</button>
+        <div class="materials-grid" id="materials-gallery-s">
+          <img src="https://i.postimg.cc/Ls1xDzqb/gpt-image-2-(medium)-a-A-printable-workshee.png" alt="Worksheet 1" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/R0Hgdc6M/gpt-image-2-(medium)-a-A-Rocket-Launch-ex.png" alt="Rocket Launch Activity" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/0Q1cBbDQ/gpt-image-2-(medium)-a-A-set-of-3-flashcard.png" alt="Flashcards Set" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/7L2K9gGy/gpt-image-2-(medium)-a-Educational-sorting.png" alt="Sorting Activity" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/fb98Cx3G/gpt-image-2-(medium)-a-Three-cartoon-insect.png" alt="Insects Clipart" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/BbVFRVkg/stage-1.png" alt="Stage 1 Resource" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/5yRzDRDb/stage-2.png" alt="Stage 2 Resource" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/Gt5D65Vq/stage-3.png" alt="Stage 3 Resource" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/J02XS2vK/stage-4.png" alt="Stage 4 Resource" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/FzBSwB8P/stage-5.png" alt="Stage 5 Resource" onclick="openModal(this.src)">
+        </div>
+      </div>
+    </article>
+
+    <!-- ==================== MODULE 1 (←— бывший Модуль 2: My Family & My House) ==================== -->
+    <article id="module-1" class="tab-content">
+      <div class="module-header">
+        <h2>Lesson Plan 2: My Family &amp; My House</h2>
+        <div class="action-buttons">
+          <a href="#" onclick="generatePDF(event, 'lesson-content-1', 'Lesson_Plan_1.pdf')" class="btn btn-pdf">📄 Скачать PDF план урока</a>
+          <a href="#materials-section-1" class="btn btn-materials">🖨️ Дополнительные материалы</a>
+        </div>
+      </div>
+      <div id="lesson-content-1">
+        <section class="objectives-block">
+          <h3>🎯 Learning Objectives</h3>
+          <div class="objectives-grid">
+            <div class="obj-card">
+              <h4>Языковые (Language)</h4>
+              <ul>
+                <li>Уверенно называть членов семьи (mummy, daddy, brother, sister, grandma, grandpa) и комнаты (kitchen, bedroom, living room, bathroom, garden).</li>
+                <li>Строить и понимать предложения: "Where's [Mummy]?" — "She's in the [kitchen]."</li>
+              </ul>
+            </div>
+            <div class="obj-card">
+              <h4>Предметные (CLIL &amp; 4К)</h4>
+              <ul>
+                <li><strong>Social Studies &amp; Logic:</strong> Понимать структуру дома (зонирование пространства). Соотносить действия с определенными комнатами.</li>
+                <li><strong>Метапредметные:</strong> Развивать мелкую моторику и пространственное мышление через конструирование макета (оригами).</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-engage">⚡ STAGE 1: ENGAGE (Вовлечение) — 7 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Методический комментарий (CLIL &amp; 4К)</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 2:00</td><td><strong>Phase 1: Volume &amp; Size Tuning.</strong><br><strong>T:</strong> (Прикладывает палец к губам) Listen... a Small Hello. (Машет только мизинцем).<br><strong>T:</strong> Now, a Big Hello! (Машет всей рукой).<br><strong>T:</strong> Show me a BIG smile!</td><td><strong>Ss:</strong> (Шепотом) Hello...<br><strong>Ss:</strong> (Громко) HELLO!<br><strong>Ss:</strong> (Широко улыбаются).</td><td><strong>Emotional Regulation.</strong> Связь размера и громкости.<br><strong>Management:</strong> Учитель получает «пульт управления» громкостью класса через игровые образы.</td></tr>
+              <tr><td class="time-col">2:00 – 5:30</td><td><strong>Phase 2: TPR "Size Detectives".</strong><br>Рисует на доске 🐘 и 🐜.<br><strong>T:</strong> Elephant is BIG. (Тянется вверх). Ant is SMALL. (Приседает).<br><strong>ICQ:</strong> Elephant — up or down?<br><strong>Challenge:</strong> Говорит Daddy, но приседает сам.</td><td><strong>Ss:</strong> (Реагируют на слова): — Mouse! (Приседают). — Daddy! (Встают на носочки).<br><strong>Ss:</strong> (Смеются и остаются стоять на слове Daddy, исправляя учителя).</td><td><strong>CLIL (Biology &amp; Social Science).</strong> Классификация объектов.<br><strong>4К (Крит. мышление):</strong> Когнитивный контроль — нужно доверять своим знаниям, а не слепому копированию учителя.</td></tr>
+              <tr><td class="time-col">5:30 – 8:00</td><td><strong>Phase 3: The Shape Puzzle (Math-to-Art).</strong><br><strong>T:</strong> Look! One square... one triangle. (Рисует по отдельности).<br><strong>T:</strong> Magic! Put them together! (Рисует дом).<br><strong>T:</strong> What is it? A school?<br><strong>T:</strong> Is it a BIG house for a BIG family?</td><td><strong>Ss:</strong> (Рисуют фигуры пальцем в воздухе).<br><strong>Ss:</strong> (Хором) No! A HOUSE!<br><strong>Ss:</strong> Yes! Big house!</td><td><strong>Scaffolding.</strong> Визуальный синтез: из простых фигур рождается сложный объект.<br><strong>Prediction:</strong> Формирование интереса к основной теме через визуальную загадку.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-explore">🔍 STAGE 2: EXPLORE (Исследование) — 10 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Методический комментарий (CLIL &amp; 4К)</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: Symbol Decoding.</strong><br>Рисует сетку 2х2.<br><strong>T:</strong> (Показывает ложку) Spoon. Is it for the Bathroom?<br><strong>T:</strong> Point to the room!<br><strong>T:</strong> Yes! The Kitchen. Repeat: Kitchen.</td><td><strong>Ss:</strong> (Хором) No!<br><strong>Ss:</strong> (Указывают пальцами на нижний правый квадрат).<br><strong>Ss:</strong> Kitchen!</td><td><strong>CLIL (Geography/Spatial).</strong> Картирование пространства.<br><strong>4К (Крит. мышление):</strong> Анализ функции предмета.</td></tr>
+              <tr><td class="time-col">3:00 – 6:00</td><td><strong>Phase 2: "Laser Pointers".</strong><br><strong>T:</strong> Fingers up! Red lasers!<br><strong>T:</strong> (Храпит) Zzz-zzz... Where is it?<br><strong>T:</strong> (Хитрит: называет Bedroom, но показывает на Living Room).<br><strong>T:</strong> Don't look at me! Use your brain!</td><td><strong>Ss:</strong> (Наводят пальцы-лазеры на сектор 🛏️).<br><strong>Ss:</strong> Bedroom!<br><strong>Ss:</strong> (Смеются, не поддаваясь на провокацию учителя).</td><td><strong>Inhibitory Control.</strong> Умение подавлять импульс «делай как учитель» в пользу «делай правильно».</td></tr>
+              <tr><td class="time-col">6:00 – 10:00</td><td><strong>Phase 3: The Lost Family.</strong><br><strong>T:</strong> Look! Daddy is hungry. Nom-nom-nom!<br><strong>T:</strong> Where is Daddy? Is he in the Kitchen?<br><strong>T:</strong> (Меняет героев местами) Close your eyes! Open! Is it okay?</td><td><strong>Ss:</strong> (Кричат) Kitchen! Daddy is in the Kitchen!<br><strong>Ss:</strong> (Закрывают/открывают глаза).<br><strong>Ss:</strong> No! Cat is in the Bathroom! Splish-splash!</td><td><strong>CLIL (Social Science).</strong> Понимание социальных ролей.<br><strong>Кооперация:</strong> Коллективный поиск «ошибок» в доме.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-explain">💡 STAGE 3: EXPLAIN (Объяснение) — 13 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Методический комментарий (CLIL &amp; 4К)</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: Spatial Calibration.</strong><br><strong>T:</strong> Show me the TOP! BOTTOM! MIDDLE!<br><strong>T:</strong> Air Drawing! Triangle... Square!<br><strong>T:</strong> Does a square have corners?<br><strong>T:</strong> Let's count: 1, 2, 3, 4!</td><td><strong>Ss:</strong> (Указывают на части листа А4).<br><strong>Ss:</strong> (Рисуют фигуры в воздухе всем телом).<br><strong>Ss:</strong> Yes! Four corners!<br><strong>Ss:</strong> (О круге) No corners! Round!</td><td><strong>CLIL (Geometry).</strong> Активация понятий Corner и Side.<br><strong>Scaffolding:</strong> Рисование в воздухе готовит мозг к мелкой моторике.</td></tr>
+              <tr><td class="time-col">3:00 – 9:00</td><td><strong>Phase 2: The "If-Then" Dictation.</strong><br><strong>T:</strong> In the middle — a BIG square.<br><strong>T:</strong> On the square — a triangle.<br><strong>T:</strong> Logic Time! IF it has corners — color it BLUE.<br><strong>T:</strong> IF NO corners — color it RED.</td><td><strong>Ss:</strong> (Рисуют под диктовку).<br><strong>S1:</strong> Triangle has corners... so it is Blue!<br><strong>S2:</strong> Circle is round... it is Red!<br><strong>Ss:</strong> (Выполняют кодирование).</td><td><strong>4К (Крит. мышление).</strong> Алгоритмическое мышление: ребенок не просто красит, он выполняет логическую операцию.</td></tr>
+              <tr><td class="time-col">9:00 – 13:00</td><td><strong>Phase 3: Peer Check.</strong><br><strong>T:</strong> Swap papers! 1, 2, 3 — Swap!<br><strong>T:</strong> Look at the board. This is the Master Copy.<br><strong>T:</strong> Are the circles RED? Yes? Put a tick ✔.<br><strong>T:</strong> Count the ticks. 1, 2, 3...</td><td><strong>Ss:</strong> (Меняются листами).<br><strong>Ss:</strong> (Сравнивают работу соседа с эталоном).<br><strong>Ss:</strong> (Ставят галочки и считают их).<br><strong>Ss:</strong> Good job, Masha!</td><td><strong>4К (Кооперация).</strong> Взаимопроверка по критериям.<br><strong>Formative Assessment:</strong> Учитель видит прогресс класса мгновенно.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-elaborate">🚀 STAGE 4: ELABORATE (Разработка / Практика) — 15 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Методический комментарий (CLIL &amp; 4К)</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: 3D Construction.</strong><br><strong>T:</strong> Take your paper. Landscape! Fold it like a BOOK.<br><strong>T:</strong> Press! Strong fingers! Fold it again... like a small book.<br><strong>T:</strong> Open. How many rooms? Count!</td><td><strong>Ss:</strong> (Складывают лист).<br><strong>Ss:</strong> (Разворачивают) One, two, three, four!<br><strong>Ss:</strong> (Подписывают цифры в углах секторов).</td><td><strong>CLIL (Maths).</strong> Симметрия и деление целого на части.<br><strong>Fine Motor Skills:</strong> Работа пальцев активирует кору головного мозга.</td></tr>
+              <tr><td class="time-col">3:00 – 7:00</td><td><strong>Phase 2: Architectural Dictation.</strong><br><strong>T:</strong> Quick! 20 seconds! Draw a TABLE in Room 1.<br><strong>T:</strong> Draw a BED in Room 2... A BATH in Room 3... A TV in Room 4.<br><strong>T:</strong> Stop! Show me your papers!</td><td><strong>S1:</strong> Rectangle for the table! Done!<br><strong>S2:</strong> Sofa for the TV room! Done!<br><strong>Ss:</strong> (Поднимают листы вверх).</td><td><strong>Cognitive Load.</strong> Развитие навыка схематизации.<br><strong>Time Management:</strong> Работа в условиях дедлайна.</td></tr>
+              <tr><td class="time-col">7:00 – 11:00</td><td><strong>Phase 3: Populate the House.</strong><br><strong>T:</strong> Where is your family? One person — one room!<br><strong>T:</strong> Mummy, Daddy, You, and the Cat.<br><strong>T:</strong> Who is in the Kitchen? Draw!</td><td><strong>Ss:</strong> (Расселяют семью по разным секторам).<br><strong>S1:</strong> Cat is in the kitchen!<br><strong>S2:</strong> Mummy is in the bedroom.</td><td><strong>4К (Креативность).</strong> Персонализация: лексика становится частью личного опыта.</td></tr>
+              <tr><td class="time-col">11:00 – 15:00</td><td><strong>Phase 4: The Interview.</strong><br>Пишет на доске:<br>A: Where is [Mummy]?<br>B: She is in the [Kitchen].<br><strong>T:</strong> Ask your neighbor! High Five!</td><td><strong>S1:</strong> Where is Daddy?<br><strong>S2:</strong> He is in the Living room.<br><strong>S1:</strong> Good! High five!<br><strong>Ss:</strong> (Меняются ролями).</td><td><strong>4К (Коммуникация).</strong> Переход к спонтанному диалогу.<br><strong>Peer Teaching:</strong> Использование местоимений He/She/It в живом контексте.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-evaluate">✅ STAGE 5: EVALUATE (Оценка) — 5 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Методический комментарий (CLIL &amp; 4К)</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 2:00</td><td><strong>Phase 1: The Finger Audit.</strong><br><strong>T:</strong> Finger on the Kitchen!<br><strong>T:</strong> Finger on the room where you SLEEP.<br><strong>T:</strong> Finger on the room with the TV.</td><td><strong>Ss:</strong> (Наводят пальцы на нужные сектора).<br><strong>Ss:</strong> Sleep... it is a Bedroom! (Переставляют палец).</td><td><strong>4К (Крит. мышление).</strong> Декодирование: переход от названия к функции.<br><strong>Assessment:</strong> Мгновенная визуальная диагностика понимания.</td></tr>
+              <tr><td class="time-col">2:00 – 4:00</td><td><strong>Phase 2: Statistical "Stand Up".</strong><br><strong>T:</strong> Stand up IF... Mummy is in the Kitchen.<br><strong>T:</strong> Stand up IF... YOU are in the Living Room.</td><td><strong>Ss:</strong> (Встают те, чей рисунок совпал с условием).<br><strong>S1:</strong> She is in the Kitchen!</td><td><strong>Социальный интеллект.</strong> Осознание уникальности своего выбора в рамках общей группы.</td></tr>
+              <tr><td class="time-col">4:00 – 5:00</td><td><strong>Phase 3: Spatial Exit Ticket.</strong><br><strong>T:</strong> (Рисует дом и 🌸 снаружи). Where is the flower? Inside or Outside?<br><strong>T:</strong> Draw a RED flower if you are happy!</td><td><strong>Ss:</strong> Outside! In the garden!<br><strong>Ss:</strong> (Рисуют цветок нужного цвета на «обложке» своего дома).</td><td><strong>CLIL (Spatial Reasoning).</strong> Interior vs Exterior.<br><strong>Рефлексия:</strong> Цветовой код вместо слов позволяет быстро оценить настрой класса.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+      </div>
+
+      <div id="materials-section-1" class="materials-block">
+        <h3>🖨️ Дополнительные материалы к уроку 1</h3>
+        <p>Нажмите на любое изображение, чтобы рассмотреть его поближе.</p>
+        <button onclick="printMaterials('materials-gallery-1')" class="btn btn-materials" style="margin-bottom: 20px;">Распечатать все материалы (11 шт.)</button>
+        <div class="materials-grid" id="materials-gallery-1">
+          <img src="https://i.postimg.cc/1zLskDrk/Gemini-Generated-Image-oqobyeoqobyeoqob.png" alt="Family Members" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/D0hFZFD0/gpt-image-2-(medium)-a-Cartoon-family-chara.png" alt="Cartoon Family" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/50LbbjPW/gpt-image-2-(medium)-a-Educational-icon-set.png" alt="Icon Set" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/SsCkkjgt/gpt-image-2-(medium)-a-Geometry-worksheet-v.png" alt="Geometry Worksheet" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/LXL22hxw/gpt-image-2-(medium)-a-Printable-origami-te.png" alt="Origami Template" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/J08mnmg5/st-1.png" alt="Stage 1" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/Rhm9F98H/st-2.png" alt="Stage 2" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/prvxTx75/st-3.png" alt="Stage 3" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/6qKw3wS7/st-4.png" alt="Stage 4" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/XqW3J3hr/st-5.png" alt="Stage 5" onclick="openModal(this.src)">
+          <img src="https://i.postimg.cc/0NLPT70L/Dizajn-bez-nazvania-11.png" alt="Design Layout" onclick="openModal(this.src)">
+        </div>
+      </div>
+    </article>
+
+    <!-- ==================== MODULE 2 (←— бывший Модуль 3: My Birthday Party) ==================== -->
+    <article id="module-2" class="tab-content">
+      <div class="module-header">
+        <h2>Lesson Plan 3: My Birthday Party (Starlight 2)</h2>
+        <div class="action-buttons">
+          <a href="#" onclick="generatePDF(event, 'lesson-content-2', 'Lesson_Plan_2.pdf')" class="btn btn-pdf">📄 Скачать PDF план урока</a>
+          <a href="#materials-section-2" class="btn btn-materials">🖨️ Дополнительные материалы</a>
+        </div>
+      </div>
+      <div id="lesson-content-2">
+        <section class="objectives-block">
+          <h3>🎯 Learning Objectives</h3>
+          <div class="objectives-grid">
+            <div class="obj-card">
+              <h4>Языковые (Language)</h4>
+              <ul>
+                <li><strong>Vocabulary:</strong> Уверенно называть подарки (robot, computer, bike, clock, lamp, TV), геометрические фигуры и числа 11–20.</li>
+                <li><strong>Grammar:</strong> Использовать предлоги места (in, on, under) в контексте "Where is the robot?" — "It's on the table."</li>
+              </ul>
+            </div>
+            <div class="obj-card">
+              <h4>Предметные (CLIL &amp; 4К)</h4>
+              <ul>
+                <li><strong>Maths (Arithmetic):</strong> Решать простые примеры на сложение на английском языке.</li>
+                <li><strong>Geometry:</strong> Распознавать геометрические формы в объектах реального мира.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-engage">⚡ STAGE 1: ENGAGE (Вовлечение) — 8 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Методический комментарий (CLIL &amp; 4К)</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 2:30</td><td><strong>Phase 1: The Mystery Gift.</strong><br><strong>T:</strong> (Рисует квадрат с бантом). Is it a Circle? No, it's a Square!<br><strong>T:</strong> It's a Birthday! For a Monster!<br><strong>T:</strong> (Рисует 10 синих свечей). Count!<br><strong>T:</strong> (Рисует 11-ю свечу КРАСНЫМ). 10 and 1... it is ELEVEN!</td><td><strong>Ss:</strong> (Хором) No! A Square!<br><strong>Ss:</strong> (Считают хором) 1, 2, 3... 10!<br><strong>Ss:</strong> (С удивлением) ELEVEN!</td><td><strong>Maths Concept.</strong> Визуальное разделение (10 синих + 1 красная) закладывает понимание разрядности.</td></tr>
+              <tr><td class="time-col">2:30 – 5:30</td><td><strong>Phase 2: The "Teen" Pattern.</strong><br><strong>T:</strong> (Пишет 11, 12 в облаке). Special names!<br><strong>T:</strong> (Пишет 13–19, выделяя суффикс -TEEN).<br><strong>T:</strong> Thir-TEEN! (Резкий хлопок над головой на слоге TEEN).</td><td><strong>Ss:</strong> (Шепотом) Eleven, twelve...<br><strong>Ss:</strong> (С сильным хлопком) Thir-TEEN! Four-TEEN!</td><td><strong>Phonetics &amp; Scaffolding.</strong> Физический акцент предотвращает «проглатывание» окончания.<br><strong>Крит. мышление:</strong> Поиск паттерна (суффикса).</td></tr>
+              <tr><td class="time-col">5:30 – 8:00</td><td><strong>Phase 3: Rocket Launch 20.</strong><br><strong>T:</strong> Be rockets! Squat!<br><strong>T:</strong> (Считает 1–10 шепотом, 11–19 с нарастанием).<br><strong>T:</strong> 20! Happy Birthday! (Прыжок).</td><td><strong>Ss:</strong> (Сидят на корточках, шепчут 1–10).<br><strong>Ss:</strong> (Медленно выпрямляются на 11–19).<br><strong>Ss:</strong> (Прыгают на 20) Happy Birthday!</td><td><strong>Embodied Cognition.</strong> Связь физического роста тела с числовым рядом.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-explore">🔍 STAGE 2: EXPLORE (Исследование) — 10 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Методический комментарий (CLIL &amp; 4К)</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: The Laboratory Setup.</strong><br>Рисует 🔴, 🟥, 🔺, ▭.<br><strong>T:</strong> Show me a Triangle with your hands!<br><strong>T:</strong> Square: 1-2-3-4 same sides. Rectangle: long sides!</td><td><strong>Ss:</strong> (Складывают «крышу» над головой).<br><strong>Ss:</strong> (Повторяют жест «длинный» для прямоугольника).</td><td><strong>CLIL (Maths — Geometry).</strong> Введение свойств фигур.<br><strong>4К (Коммуникация):</strong> Создание общего «языка жестов».</td></tr>
+              <tr><td class="time-col">3:00 – 7:00</td><td><strong>Phase 2: "Shape Detectives".</strong><br>Показывает картинку часов/коробки.<br><strong>T:</strong> (Провокация с TV) Look! 4 corners. Is it a Square?<br><strong>T:</strong> Why?<br><strong>T:</strong> Yes! It's a Rectangle. Go to Column 4!</td><td><strong>Ss:</strong> No! It's a Circle! No corners!<br><strong>Ss:</strong> No, teacher! It's LONG!<br><strong>Ss:</strong> (Распределяют предметы по колонкам).</td><td><strong>4К (Крит. мышление).</strong> Анализ и классификация.<br><strong>CLIL (Scientific Method):</strong> Категоризация по признакам.</td></tr>
+              <tr><td class="time-col">7:00 – 10:00</td><td><strong>Phase 3: The Reality Check.</strong><br><strong>T:</strong> Detectives! Find a RECTANGLE in the class!<br><strong>T:</strong> (Challenge) Find a TRIANGLE! It's a secret...<br><strong>T:</strong> Is the letter "A" a triangle? Let's see!</td><td><strong>Ss:</strong> (Указывают на дверь, окно, парту) Rectangle!<br><strong>S1:</strong> Look! The ruler!<br><strong>S2:</strong> The letter A!</td><td><strong>4К (Креативность).</strong> Поиск нестандартных решений в привычной среде.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-explain">💡 STAGE 3: EXPLAIN (Объяснение) — 8 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Методический комментарий (CLIL &amp; 4К)</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: The Magic Bridge (A vs An).</strong><br><strong>T:</strong> (Пишет a apple). A... apple... (Имитирует икоту). It's bumpy!<br><strong>T:</strong> (Дописывает n красным). Look! A Bridge! An-n-apple.<br><strong>T:</strong> Cat? Elephant?</td><td><strong>Ss:</strong> (Пробуют произнести a apple и смеются).<br><strong>Ss:</strong> (На слове An делают жест скольжения).<br><strong>Ss:</strong> A cat! An elephant!</td><td><strong>CLIL (Phonology).</strong> Опора на акустику (Flow vs Bumpy).<br><strong>Scaffolding:</strong> Визуальный мостик n как соединитель звуков.</td></tr>
+              <tr><td class="time-col">3:00 – 6:00</td><td><strong>Phase 2: The Spider Hand.</strong><br><strong>T:</strong> Spider hand! 🕷️ Run, spider, run!<br><strong>T:</strong> On the head! Under the chair!<br><strong>T:</strong> In the pocket! Quick! Spider ON the nose!</td><td><strong>Ss:</strong> (Делают «паучка» из пальцев).<br><strong>Ss:</strong> (Молниеносно перемещают руку по командам).<br><strong>Ss:</strong> (Хором называют предлоги).</td><td><strong>Embodied Cognition.</strong> Изучение пространства через тело.<br><strong>Engagement:</strong> Игровой образ снимает напряжение при изучении грамматики.</td></tr>
+              <tr><td class="time-col">6:00 – 8:00</td><td><strong>Phase 3: The Logic Glitch.</strong><br><strong>T:</strong> Robots, listen! Pencil ON the book.<br><strong>T:</strong> Pencil UNDER the book.<br><strong>T:</strong> (Ловушка) Pencil IN the table!<br><strong>T:</strong> What? Why no?</td><td><strong>Ss:</strong> (Выполняют команды).<br><strong>Ss:</strong> (Замирают на ловушке).<br><strong>Ss:</strong> No hole! Impossible! Table is hard!</td><td><strong>4К (Крит. мышление).</strong> Inhibitory Control.<br><strong>Assessment:</strong> Учитель видит, кто понимает предлоги.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-elaborate">🚀 STAGE 4: ELABORATE (Разработка / Практика) — 15 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Методический комментарий (CLIL &amp; 4К)</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: The Blueprint.</strong><br><strong>T:</strong> You are Chefs! Draw a table. Long or round?<br><strong>T:</strong> Now, a BIG cake. Square or Rectangle?</td><td><strong>Ss:</strong> (Рисуют столы разной формы).<br><strong>Ss:</strong> My cake is a rectangle!</td><td><strong>4К (Креативность &amp; Автономия).</strong> Свобода выбора формы повышает субъектность ребенка.</td></tr>
+              <tr><td class="time-col">3:00 – 7:00</td><td><strong>Phase 2: The Math Lab.</strong><br><strong>T:</strong> (Пишет 10+7=?) Maths time! Ten plus seven is...?<br><strong>T:</strong> Draw 10 BLUE candles and 7 RED candles.<br><strong>T:</strong> Quick! 60 seconds!</td><td><strong>Ss:</strong> (Хором) Seventeen!<br><strong>Ss:</strong> (Рисуют и шепчут) One, two... ten... seventeen!</td><td><strong>CLIL (Maths — Place Value).</strong> Визуализация состава числа (10 и 7).</td></tr>
+              <tr><td class="time-col">7:00 – 11:00</td><td><strong>Phase 3: Logic Dictation.</strong><br><strong>T:</strong> Draw a ball UNDER the table.<br><strong>T:</strong> Draw AN orange... IN the box... UNDER the table.</td><td><strong>Ss:</strong> (Декодируют цепочку предлогов) Orange → Box → Under.<br><strong>Ss:</strong> (Сравнивают с доской).</td><td><strong>4К (Крит. мышление).</strong> Удержание в памяти трехступенчатого алгоритма.</td></tr>
+              <tr><td class="time-col">11:00 – 15:00</td><td><strong>Phase 4: Quality Control.</strong><br>A: Where is the ball?<br>B: It is UNDER the table.<br><strong>T:</strong> Interview your partner! Go!</td><td><strong>S1:</strong> Where is the orange?<br><strong>S2:</strong> It is in the box!<br><strong>Ss:</strong> (Меняются ролями).</td><td><strong>4К (Коммуникация).</strong> Перенос пассивного знания в активную речь.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-evaluate">✅ STAGE 5: EVALUATE (Оценка) — 5 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Методический комментарий (CLIL &amp; 4К)</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 2:00</td><td><strong>Phase 1: Brain vs. Eyes.</strong><br><strong>T:</strong> Trust your EARS, not your eyes!<br><strong>T:</strong> Hands ON the head! (Делает верно).<br><strong>T:</strong> Hands IN the pocket! (Сам кладет руки на голову).</td><td><strong>Ss:</strong> (Концентрируются и игнорируют движения, выполняя голосовую команду).</td><td><strong>CLIL (Interference).</strong> Когнитивный конфликт.<br><strong>4К (Крит. мышление):</strong> Подавление зеркального рефлекса.</td></tr>
+              <tr><td class="time-col">2:00 – 4:00</td><td><strong>Phase 2: Finger Voting.</strong><br><strong>T:</strong> 1 finger = A, 2 fingers = AN.<br><strong>T:</strong> (Показывает «Robot»). A or AN?<br><strong>T:</strong> (Показывает «Umbrella»). Open mouth?</td><td><strong>Ss:</strong> (Поднимают пальцы-голоса).<br><strong>Ss:</strong> Umbrella — /ʌ/... Open mouth! (Показывают ✌️).</td><td><strong>Formative Assessment.</strong> Индивидуальный срез знаний без «эффекта толпы».</td></tr>
+              <tr><td class="time-col">4:00 – 5:00</td><td><strong>Phase 3: The Exit Ritual.</strong><br><strong>T:</strong> 17 candles on the cake. Count back and blow them out!<br><strong>T:</strong> 17, 16... 1... ZERO! Goodbye!</td><td><strong>Ss:</strong> (Хором считают в обратном порядке).<br><strong>Ss:</strong> (На ZERO дуют на доску). Goodbye, teacher!</td><td><strong>CLIL (Numeracy).</strong> Обратный счет.<br><strong>Self-Regulation:</strong> Ритуал «задувания свечей» помогает успокоиться.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+      </div>
+
+      <div id="materials-section-2" class="materials-block">
+        <h3>🖨️ Дополнительные материалы к уроку 2</h3>
+        <p>Нажмите на любое изображение, чтобы рассмотреть его поближе.</p>
+        <button onclick="printMaterials('materials-gallery-2')" class="btn btn-materials" style="margin-bottom: 20px;">Распечатать все материалы (11 шт.)</button>
+        <div class="materials-grid" id="materials-gallery-2">
+          <img src="https://i.postimg.cc/g0jp5R6V/3-page-4.png" onclick="openModal(this.src)" alt="p4">
+          <img src="https://i.postimg.cc/jSZKZvCn/3-page-5.png" onclick="openModal(this.src)" alt="p5">
+          <img src="https://i.postimg.cc/CxmYmJdf/3-page-6.png" onclick="openModal(this.src)" alt="p6">
+          <img src="https://i.postimg.cc/P52h2KND/3-page-7.png" onclick="openModal(this.src)" alt="p7">
+          <img src="https://i.postimg.cc/rwQcQgzr/3-page-8.png" onclick="openModal(this.src)" alt="p8">
+          <img src="https://i.postimg.cc/25yYJvBh/3-stage-1.png" onclick="openModal(this.src)" alt="s1">
+          <img src="https://i.postimg.cc/yNxK59Sh/3-stage-2.png" onclick="openModal(this.src)" alt="s2">
+          <img src="https://i.postimg.cc/8CcG3Wrh/3-stage-3.png" onclick="openModal(this.src)" alt="s3">
+          <img src="https://i.postimg.cc/13T7mNjG/Chat-GPT-Image-1-maa-2026-g-11-35-48.png" onclick="openModal(this.src)" alt="b1">
+          <img src="https://i.postimg.cc/htwZD75T/Chat-GPT-Image-1-maa-2026-g-12-17-00.png" onclick="openModal(this.src)" alt="b2">
+          <img src="https://i.postimg.cc/wjP4qsGm/Gemini-Generated-Image-xlof4xlof4xlof4x.png" onclick="openModal(this.src)" alt="scene">
+        </div>
+      </div>
+    </article>
+
+    <!-- ==================== MODULE 3 (←— бывший Модуль 4: My Body & Health) ==================== -->
+    <article id="module-3" class="tab-content">
+      <div class="module-header">
+        <h2>Lesson Plan 4: My Body &amp; Health (Starlight 2, Module 3)</h2>
+        <div class="action-buttons">
+          <a href="#" onclick="generatePDF(event, 'lesson-content-3', 'Lesson_Plan_3.pdf')" class="btn btn-pdf">📄 Скачать PDF план урока</a>
+          <a href="#materials-section-3" class="btn btn-materials">🖨️ Дополнительные материалы</a>
+        </div>
+      </div>
+      <div id="lesson-content-3">
+        <section class="objectives-block">
+          <h3>🎯 Learning Objectives</h3>
+          <div class="objectives-grid">
+            <div class="obj-card">
+              <h4>Языковые (Language)</h4>
+              <ul>
+                <li><strong>Vocabulary:</strong> Называть части тела: head, arm, leg, foot, tummy, eyes, ears, mouth, nose.</li>
+                <li><strong>Grammar 1:</strong> <em>I have got / I've got</em> для описания.</li>
+                <li><strong>Grammar 2:</strong> Imperatives: <em>Clap your hands, Nod your head, Stamp your feet.</em></li>
+                <li><strong>Speaking:</strong> <em>"My [arm] hurts!"</em></li>
+              </ul>
+            </div>
+            <div class="obj-card">
+              <h4>Предметные (CLIL &amp; 4К)</h4>
+              <ul>
+                <li><strong>Biology:</strong> Строение тела. Сравнение человека и фантастического существа.</li>
+                <li><strong>Health:</strong> Умение локализовать боль и проявить эмпатию.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-engage">⚡ STAGE 1: ENGAGE — 7 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 2:00</td><td><strong>Phase 1: The Mechanical Hook.</strong><br>Учитель входит, двигаясь только одной частью тела за раз.<br><strong>T:</strong> (Механически) System boot... Hello! I am a Robot.<br><strong>T:</strong> Check my ARM. Whirr-click! Check my HEAD.</td><td>Переходят в состояние «острого внимания». Зеркально повторяют «изолированные» движения.</td><td><strong>Neuromodulation:</strong> Слом привычного образа учителя провоцирует исследовательский рефлекс.<br><strong>CLIL (Biomechanics):</strong> Тело — система рычагов и суставов.</td></tr>
+              <tr><td class="time-col">2:00 – 5:30</td><td><strong>Phase 2: "System Error".</strong><br><em>Rule:</em> Do it ONLY if I say "Robot says...".<br><strong>T:</strong> Robot says... Clap your hands!<br><strong>T:</strong> (Ловушка) Stamp your feet! (Сам топает). BEEP! System error!</td><td>Тренируют торможение импульсивной реакции. Анализируют ошибку в рамках игры.</td><td><strong>4K — Critical Thinking:</strong> Inhibitory Control.<br><strong>Linguistic Sensitivity:</strong> Навык селективного аудирования.</td></tr>
+              <tr><td class="time-col">5:30 – 8:00</td><td><strong>Phase 3: The Blueprint.</strong><br>Рисует чертеж робота из геометрических фигур.<br><strong>T:</strong> Square head, rectangle body. The robot is 40% ready. But something is missing...</td><td>Осуществляют перенос знаний: находят знакомые Shapes в структуре тела.</td><td><strong>Cognitive Transfer.</strong> Переход от 3D-опыта к 2D-схеме.<br><strong>CLIL (Geometry &amp; Engineering).</strong></td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-explore">🔍 STAGE 2: EXPLORE — 10 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: Human Biology.</strong><br><strong>T:</strong> Look! I have got two eyes. Show me your eyes! I have got two arms. Repeat!</td><td>Считают свои глаза и руки. Повторяют фразу, широко разводя руки.</td><td><strong>CLIL (Biology):</strong> Понятие симметрии.<br><strong>Scaffolding:</strong> Жест «руки к груди» на фразе I have got.</td></tr>
+              <tr><td class="time-col">3:00 – 6:00</td><td><strong>Phase 2: The Mutation.</strong><br><strong>T:</strong> (Рисует кляксу с 5 глазами). It's a MONSTER!<br><strong>T:</strong> (Хрипло) I have got FIVE eyes! Now you! Be monsters!</td><td>Смеются. Считают хором до 5. Меняют голос на хриплый.</td><td><strong>4K — Critical Thinking:</strong> Сравнение «нормы» (2) и «сказочного» (5).<br><strong>Affective Filter:</strong> Игра голосом снимает страх ошибиться.</td></tr>
+              <tr><td class="time-col">6:00 – 10:00</td><td><strong>Phase 3: The Frankenstein Lab.</strong><br><strong>T:</strong> Let's make a BIG monster! How many LEGS? Don't shout! Show fingers!</td><td>«Голосуют» пальцами. Хором: I've got four legs! Видят, как их выбор меняет рисунок.</td><td><strong>4K — Collaboration:</strong> Принятие коллективного решения без шума.<br><strong>Agency:</strong> Дети — «соавторы» урока.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-explain">💡 STAGE 3: EXPLAIN — 8 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: The Inciting Incident.</strong><br><strong>T:</strong> (Резко хватается за голову). Ouch! My head hurts!<br><strong>T:</strong> (Пишет: 🤕 My ______ hurts!) Repeat!</td><td>Затихают. Начинают сочувственно повторять, копируя интонацию и жест.</td><td><strong>CLIL (Health &amp; SEL):</strong> Ребенок учится сопереживать и называть дискомфорт.</td></tr>
+              <tr><td class="time-col">3:00 – 6:00</td><td><strong>Phase 2: The "Ouch" Drill.</strong><br><strong>T:</strong> Show me your leg. OUCH! Hold your leg! Say: My leg hurts!<br><strong>T:</strong> (Достает воображаемый пластырь). Take a Magic Plaster. Pshhh!</td><td>Хватаются за разные части тела, имитируя боль. Хором «жалуются».</td><td><strong>Classroom Management:</strong> «Волшебный пластырь» — переключатель внимания и инструмент тишины.</td></tr>
+              <tr><td class="time-col">6:00 – 8:00</td><td><strong>Phase 3: Grammar Coding.</strong><br><strong>T:</strong> (Обводит S в hurtS). One head — hurtS! (Шипит: hurt-s-s-s).<br><strong>T:</strong> (Ловушка) My HAIR hurts!</td><td>Соглашаются с болью в носу, но смеются над «болью в волосах». Nooo! Hair doesn't hurt!</td><td><strong>Grammar Scaffolding:</strong> Окончание -s → звуковой образ змеи.<br><strong>4K — Critical Thinking:</strong> Проверка гипотезы на истинность.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-elaborate">🚀 STAGE 4: ELABORATE — 15 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 4:00</td><td><strong>Phase 1: The Mutation Sketch.</strong><br><strong>T:</strong> Draw a crazy alien. 4 arms, 3 legs, 5 eyes? You are the scientists! No colors, just pencil! (Таймер 3 мин.)</td><td>В режиме «мозгового штурма» рисуют существ, нарушая правила симметрии.</td><td><strong>4K — Creativity:</strong> Ограничение по времени отключает «перфекциониста».<br><strong>CLIL (Biology):</strong> Деконструкция нормы.</td></tr>
+              <tr><td class="time-col">4:00 – 8:00</td><td><strong>Phase 2: Mutation ID.</strong><br><strong>T:</strong> Pencils down! Show your alien to your partner.<br>(Доска: I've got _____) Point and say!</td><td><strong>S1:</strong> Look! I've got three legs!<br><strong>S2:</strong> Wow! And I've got two heads!</td><td><strong>4K — Communication:</strong> Жест (указательный палец) — кинестетический якорь для фразы владения.</td></tr>
+              <tr><td class="time-col">8:00 – 15:00</td><td><strong>Phase 3: The Monster Clinic.</strong><br><strong>T:</strong> Your monster is sick! Take a RED pencil. Draw ONE cross on a body part.<br>(Демо) S1: Ouch! T: What's the matter? S1: My arm hurts! T: Oh, poor monster!<br>Now, play in pairs!</td><td>«Маркируют» зону боли. Распределяют роли Доктора и Монстра. Разыгрывают диалоги.</td><td><strong>CLIL (SEL):</strong> Развитие эмпатии. Отработка социально-адекватной реакции на жалобу.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-evaluate">✅ STAGE 5: EVALUATE — 5 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Действия и речь учителя (T)</th><th>Действия и речь обучающихся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: "Medical Scanner".</strong><br><em>Rule:</em> Word only → touch. Word HURTS → cry Ouch!<br><strong>T:</strong> Head! Arm! Tummy HURTS! Leg HURTS! Foot! Nose HURTS!</td><td>Мгновенно реагируют. Переключаются между спокойным касанием и «Ouch!».</td><td><strong>CLIL (Cognitive Flexibility).</strong> Высокая нагрузка, мгновенный выбор программы.<br><strong>Formative Assessment.</strong></td></tr>
+              <tr><td class="time-col">3:00 – 5:00</td><td><strong>Phase 2: The Discharge Desk.</strong><br><strong>T:</strong> (У двери) The clinic is closing! How are you?<br>(На «жалобу») Oh! Magic pill for you! Goodbye!</td><td>Строятся в очередь. S1: I'm fine! S2: My nose hurts! Делают осознанный выбор стратегии.</td><td><strong>4K — Communication:</strong> Переход к реальному социальному взаимодействию.<br><strong>Autonomy:</strong> Ребенок сам выбирает содержание высказывания.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+      </div>
+
+      <div id="materials-section-3" class="materials-block">
+        <h3>🖨️ Дополнительные материалы к уроку 3</h3>
+        <button onclick="printMaterials('materials-gallery-3')" class="btn btn-materials" style="margin-bottom: 20px;">Распечатать все материалы (10 шт.)</button>
+        <div class="materials-grid" id="materials-gallery-3">
+          <img src="https://i.postimg.cc/rsVN7d9h/4-1.png" onclick="openModal(this.src)" alt="4-1">
+          <img src="https://i.postimg.cc/j2x4BWXV/4-2.png" onclick="openModal(this.src)" alt="4-2">
+          <img src="https://i.postimg.cc/NFskZy4q/4-3.png" onclick="openModal(this.src)" alt="4-3">
+          <img src="https://i.postimg.cc/XqjktZgH/4-4.png" onclick="openModal(this.src)" alt="4-4">
+          <img src="https://i.postimg.cc/cCxBPKck/4-5.png" onclick="openModal(this.src)" alt="4-5">
+          <img src="https://i.postimg.cc/BbSBR8Cw/4-6.png" onclick="openModal(this.src)" alt="4-6">
+          <img src="https://i.postimg.cc/rsVN7d9B/gpt-image-2-(medium)-a-Anatomy-cards-for-he.png" onclick="openModal(this.src)" alt="anatomy">
+          <img src="https://i.postimg.cc/tJqN8154/gpt-image-2-(medium)-a-Comparative-flashcar.png" onclick="openModal(this.src)" alt="flashcards">
+          <img src="https://i.postimg.cc/hvD1NJ0H/gpt-image-2-(medium)-a-Role-play-cards-for.png" onclick="openModal(this.src)" alt="roleplay">
+          <img src="https://i.postimg.cc/Y0rzT430/gpt-image-2-(medium)-a-Technical-blueprint.png" onclick="openModal(this.src)" alt="blueprint">
+        </div>
+      </div>
+    </article>
+
+    <!-- ==================== MODULE 4 (←— бывший Модуль 5: The Talent Show) ==================== -->
+    <article id="module-4" class="tab-content">
+      <div class="module-header">
+        <h2>Lesson Plan 5: The Talent Show (Starlight 2, Module 4)</h2>
+        <div class="action-buttons">
+          <a href="#" onclick="generatePDF(event, 'lesson-content-4', 'Lesson_Plan_4.pdf')" class="btn btn-pdf">📄 Скачать PDF план урока</a>
+          <a href="#materials-section-4" class="btn btn-materials">🖨️ Дополнительные материалы</a>
+        </div>
+      </div>
+      <div id="lesson-content-4">
+        <section class="objectives-block">
+          <h3>🎯 Learning Objectives</h3>
+          <div class="objectives-grid">
+            <div class="obj-card">
+              <h4>Языковые (Language)</h4>
+              <ul>
+                <li><strong>Vocabulary:</strong> sing, dance, draw, ride a bike, play football; piano, drum, guitar, recorder, triangle.</li>
+                <li><strong>Grammar:</strong> can / can't для описания способностей.</li>
+                <li><strong>Speaking:</strong> Рассказывать о своих талантах в мини-диалоге.</li>
+              </ul>
+            </div>
+            <div class="obj-card">
+              <h4>Предметные (CLIL &amp; 4К)</h4>
+              <ul>
+                <li><strong>Music Appreciation:</strong> Распознавать инструменты на слух и визуально.</li>
+                <li><strong>Critical Thinking:</strong> Категоризация навыков, семантическая сортировка.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-engage">⚡ STAGE 1: ENGAGE — 7 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: The Superhero Entrance.</strong><br><strong>T:</strong> (Power Pose) Hello, heroes! I am Super-Teacher! Look! I can JUMP! I can RUN!<br><strong>T:</strong> Super-class! Stand up! 1, 2, 3... JUMP!</td><td>Мгновенно копируют позу. Синхронно прыгают, выкрикивая Jump.</td><td><strong>Grammar Scaffolding:</strong> Ввод Can через физическое действие.</td></tr>
+              <tr><td class="time-col">3:00 – 6:00</td><td><strong>Phase 2: Academy Training.</strong><br><strong>T:</strong> I can play football! I can ride a bike! I can draw... (шепотом, маленькое движение).<br><em>Master says: Play football!</em></td><td>Отрабатывают действия, варьируя амплитуду. Декодируют команду без визуальной подсказки.</td><td><strong>Embodied Cognition.</strong><br><strong>4K — Communication:</strong> Считывание контекста через пантомиму.</td></tr>
+              <tr><td class="time-col">6:00 – 8:00</td><td><strong>Phase 3: The Talent Bridge.</strong><br><strong>T:</strong> Breath in... out. You are strong. But... can you play music? Welcome to the Talent Show!</td><td>Переключаются в режим концентрации. Осознают разницу между силой и талантом.</td><td><strong>4K — Critical Thinking:</strong> Категоризация навыков (Gross Motor vs. Fine Motor/Art).</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-explore">🔍 STAGE 2: EXPLORE — 10 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: Визуальная опора.</strong><br><strong>T:</strong> Look! Piano, Guitar, Drum, Recorder, Triangle.<br><strong>T:</strong> Repeat: Tri-an-gle! Re-cor-der!</td><td>Следят за карточками. Хором отрабатывают произношение.</td><td><strong>Dual Coding Theory:</strong> Иконический + вербальный каналы.</td></tr>
+              <tr><td class="time-col">3:00 – 7:00</td><td><strong>Phase 2: The Sound Map.</strong><br><strong>T:</strong> Guitar: Strum-strum! Drum: Bam-bam! Recorder: Tu-tu! Piano: Plink-plonk! Triangle: Ding!</td><td>Копируют механику каждого инструмента. Связывают название со звукоподражанием и жестом.</td><td><strong>CLIL (Music Classification):</strong> Hit, Strum, Blow.<br><strong>Embodied Memory:</strong> Ономатопея как мнемонический крючок.</td></tr>
+              <tr><td class="time-col">7:00 – 10:00</td><td><strong>Phase 3: The Invisible Orchestra.</strong><br><strong>T:</strong> You are the orchestra. I am the Conductor! Ready? Piano! Drum! Recorder!</td><td>Синхронно «играют» на воображаемых инструментах. Концентрируются на командах дирижера.</td><td><strong>4K — Collaboration:</strong> Класс как единая команда.<br><strong>Formative Assessment.</strong></td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-explain">💡 STAGE 3: EXPLAIN — 8 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: The Emotion Code.</strong><br>🟢 CAN + 😊 / 🔴 CAN'T + ☹️<br><strong>T:</strong> (Power Pose) I CAN play the guitar!<br><strong>T:</strong> (Руки крестом X) I CAN'T play the piano.</td><td>Копируют «силовую» и «слабую» позы. Синхронизируют жесты с цветами.</td><td><strong>Embodied Grammar:</strong> Бицепс = возможность, Крест = блок.</td></tr>
+              <tr><td class="time-col">3:00 – 6:00</td><td><strong>Phase 2: The Acoustic Lab.</strong><br>CAN: коротко I /kən/ play. CAN'T: длинно I /kɑːnt/ play.<br>(Drum + 🟢). Go!</td><td>Тренируют фонематический слух. «Вытягивают» или «обрезают» звук физически.</td><td><strong>CLIL (Phonology):</strong> Can редуцируется, can't всегда под ударением.</td></tr>
+              <tr><td class="time-col">6:00 – 8:00</td><td><strong>Phase 3: The Talent Judge.</strong><br><strong>T:</strong> Can you play the drum? ⤴️<br><strong>T:</strong> (Ловушка) Can you FLY? ⤴️</td><td>Используют восходящую интонацию. Смеются на вопросе про полет и выбирают No, I can't.</td><td><strong>4K — Critical Thinking:</strong> Подавление автоматизма «Yes».</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-elaborate">🚀 STAGE 4: ELABORATE — 15 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 6:00</td><td><strong>Phase 1: The Star Card.</strong><br>5 мин! NO colors, just pencil!<br>1. Draw 1 instrument → write: I can play the...<br>2. Draw 1 action → write: I can't...</td><td>Быстрый набросок «визитки» таланта. Собирают фразы из блоков на доске.</td><td><strong>4K — Creativity &amp; Agency:</strong> Жесткий тайминг снимает страх «чистого листа».</td></tr>
+              <tr><td class="time-col">6:00 – 12:00</td><td><strong>Phase 2: The Audition.</strong><br>Stand up! Hand up! Find a partner! High five!<br>Can you play the...? Yes, I can! (Show me!)<br>Find a NEW partner! (Смена пар).</td><td>Активно перемещаются. Разыгрывают микро-диалоги, подкрепляя ответ имитацией игры.</td><td><strong>Embodied Fluency:</strong> Жест при ответе гарантирует осознанность речи.</td></tr>
+              <tr><td class="time-col">12:00 – 15:00</td><td><strong>Phase 3: The Reporter.</strong><br><strong>T:</strong> (Маркер-микрофон). Tell me about Dima. Can he play the guitar?<br>Can Masha fly?</td><td>Вспоминают информацию от партнеров. Воспринимают форму 3-го лица (Can he/she?)</td><td><strong>Grammar Bridge:</strong> Мягкое введение 3-го лица.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-evaluate">✅ STAGE 5: EVALUATE — 5 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 2:00</td><td><strong>Phase 1: The Mirror Game.</strong><br><em>Rule:</em> TRUE → "Yes, I can!" + do it. CRAZY → "No, I can't!" + cross arms.<br>I can clap my hands! I can play the piano!</td><td>Синхронно выполняют команды, отыгрывая каждое действие.</td><td><strong>Formative Assessment:</strong> Групповой TPR-отклик.</td></tr>
+              <tr><td class="time-col">2:00 – 4:00</td><td><strong>Phase 2: The Absurdity Trap.</strong><br>I can play the guitar! / I can play... the ELEPHANT! / I can fly to the moon!</td><td>Распознают абсурд. Смеются, «блокируют» учителя: No, I can't!</td><td><strong>4K — Critical Thinking:</strong> Semantic Sorting — мозг отделяет смысл от шума.</td></tr>
+              <tr><td class="time-col">4:00 – 5:00</td><td><strong>Phase 3: The Grand Finale.</strong><br>Can YOU ride a bike? You are a SUPER band! Air high-five! Goodbye!</td><td>Дают ответы о реальных умениях. Совершают «воздушное» рукопожатие.</td><td><strong>SEL:</strong> Формирование чувства общности.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+      </div>
+
+      <div id="materials-section-4" class="materials-block">
+        <h3>🖨️ Дополнительные материалы к уроку 4</h3>
+        <button onclick="printMaterials('materials-gallery-4')" class="btn btn-materials" style="margin-bottom: 20px;">Распечатать все материалы (9 шт.)</button>
+        <div class="materials-grid" id="materials-gallery-4">
+          <img src="https://i.postimg.cc/brYkvKW7/5-1.png" onclick="openModal(this.src)" alt="5-1">
+          <img src="https://i.postimg.cc/G2xvdc7Y/5-2.png" onclick="openModal(this.src)" alt="5-2">
+          <img src="https://i.postimg.cc/tTjFK15y/5-3.png" onclick="openModal(this.src)" alt="5-3">
+          <img src="https://i.postimg.cc/NMcR3y4X/5-4.png" onclick="openModal(this.src)" alt="5-4">
+          <img src="https://i.postimg.cc/NMcR3yx3/5-5.png" onclick="openModal(this.src)" alt="5-5">
+          <img src="https://i.postimg.cc/NjZ6xC26/5-6.png" onclick="openModal(this.src)" alt="5-6">
+          <img src="https://i.postimg.cc/SxnLCbRz/gpt-image-2-(medium)-a-Handout-1-Superher.png" onclick="openModal(this.src)" alt="superhero">
+          <img src="https://i.postimg.cc/Mpn0VJHB/gpt-image-2-(medium)-a-Handout-2-The-Soun.png" onclick="openModal(this.src)" alt="sound">
+          <img src="https://i.postimg.cc/y82mTp3J/gpt-image-2-(medium)-a-Handout-5-My-Star.png" onclick="openModal(this.src)" alt="star">
+        </div>
+      </div>
+    </article>
+
+    <!-- ==================== MODULE 5 (←— бывший Модуль 6: Magic of Nature) ==================== -->
+    <article id="module-5" class="tab-content">
+      <div class="module-header">
+        <h2>Lesson Plan 6: The Magic of Nature (Starlight 2, Module 5)</h2>
+        <div class="action-buttons">
+          <a href="#" onclick="generatePDF(event, 'lesson-content-5', 'Lesson_Plan_5.pdf')" class="btn btn-pdf">📄 Скачать PDF план урока</a>
+          <a href="#materials-section-5" class="btn btn-materials">🖨️ Дополнительные материалы</a>
+        </div>
+      </div>
+      <div id="lesson-content-5">
+        <section class="objectives-block">
+          <h3>🎯 Learning Objectives</h3>
+          <div class="objectives-grid">
+            <div class="obj-card">
+              <h4>Языковые (Language)</h4>
+              <ul>
+                <li><strong>Vocabulary:</strong> butterfly, monkey, frog, spider, elephant, bird. Жизненный цикл: egg, caterpillar, chrysalis, butterfly. Глаголы: climb, fly, swim, jump, run.</li>
+                <li><strong>Grammar:</strong> Множественное число (+s) и исключения (foot/feet).</li>
+              </ul>
+            </div>
+            <div class="obj-card">
+              <h4>Предметные (CLIL &amp; 4К)</h4>
+              <ul>
+                <li><strong>Biology:</strong> Метаморфоз бабочки.</li>
+                <li><strong>Maths:</strong> Простейшее сложение (у одной птицы 2 ноги, у шести — 12).</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-engage">⚡ STAGE 1: ENGAGE — 7 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 2:00</td><td><strong>Phase 1: The Magic Portal.</strong><br><strong>T:</strong> (Шепотом) Shhh... We are in the Green Forest! Put on your explorer hats! Look! Big trees! Listen... what is it?</td><td>Копируют движения, «входя» в игровую роль. Имитируют вслушивание в звуки леса.</td><td><strong>Imaginative Play:</strong> Смена роли снижает языковую тревожность.<br><strong>Neuromodulation:</strong> Шепот активирует фокус внимания.</td></tr>
+              <tr><td class="time-col">2:00 – 5:00</td><td><strong>Phase 2: The Mime &amp; Sound Lab.</strong><br>Elephant: Boom! Boom! (Топает). Frog: Jump! Jump! Monkey: Oo-oo-aa-aa!<br>Now YOU are monkeys! Freeze!</td><td>Угадывают животных. Проживают образ каждого всем телом. Тренируют Freeze.</td><td><strong>Embodied Cognition:</strong> Звукоподражание — акустический мост к слову.<br><strong>Lexical Priming:</strong> Подготовка к глаголам движения.</td></tr>
+              <tr><td class="time-col">5:00 – 7:00</td><td><strong>Phase 3: The Visual Hook.</strong><br>Рисует круг. What is it? A ball?<br>(Пририсовывает ноги, считая) One, two... eight! Yes! A big spider!</td><td>Активно угадывают. Считают ноги паука с учителем.</td><td><strong>CLIL (Maths &amp; Zoology):</strong> Подготовка к классификации по количеству ног.<br><strong>Pattern Recognition:</strong> Рисование по частям.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-explore">🔍 STAGE 2: EXPLORE — 10 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: The "Snake" Rule.</strong><br>1 bird. 2 legs. Now 3 bird-S-s! (Дорисовывает к S голову змеи 🐍).<br>The snake is here! S-s-s! 3 birdS! Count! 1, 2... 6! 6 legS!</td><td>Синхронно с учителем шипят окончание, имитируя волнообразное движение змеи. Считают ноги вслух.</td><td><strong>Inductive Grammar:</strong> Визуальный триггер вместо правила.<br><strong>Phonological Coding:</strong> Звук /s/ → образ змеи.</td></tr>
+              <tr><td class="time-col">3:00 – 7:00</td><td><strong>Phase 2: Crazy Maths Challenge.</strong><br>2 spiders. How many legs? 8 + 8 = ?<br>(Провокация) Is it 16 elephants? Write it: 16 leg-S!</td><td>Считают на пальцах. В порыве исправить «ошибку» громко произносят целевое слово с -s.</td><td><strong>CLIL (Maths) &amp; 4K (Critical Thinking):</strong> Грамматика усваивается имплицитно.</td></tr>
+              <tr><td class="time-col">7:00 – 10:00</td><td><strong>Phase 3: The Irregular Trap.</strong><br>1 foot. (Прыгает на двух) 2 feet!<br>fOOt (O = один взгляд). fEEt (E = две ножки).<br>Show me 1 foot! Show me 2 feet!</td><td>Топают одной ногой на foot. Прыгают на двух на feet. «Фотографируют» буквы-картинки.</td><td><strong>Visual Mnemonics:</strong> Исключения через образную память.<br><strong>Embodied Cognition:</strong> Разное физическое ощущение для разных слов.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-explain">💡 STAGE 3: EXPLAIN — 8 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 4:00</td><td><strong>Phase 1: Narrative Drawing.</strong><br>1. Лист + белая точка → EGG. 2. POP! → caterpillar (Crunch!). 3. CHRYSALIS (Sleeping. Shhh). 4. BUTTERFLY! It's beautiful!</td><td>Наблюдают за «оживанием» доски. Непроизвольно имитируют звуки.</td><td><strong>Dual Coding Theory:</strong> Цикл как логическая цепочка событий, не список слов.</td></tr>
+              <tr><td class="time-col">4:00 – 7:00</td><td><strong>Phase 2: Phonetic Percussion.</strong><br>Egg! (1 слог — жест). Ca-ter-pil-lar! (4 слога — дробь пальцами). Chry-sa-lis! (3 слога). But-ter-fly! (3 слога — взмахи кистями).</td><td>Копируют ритмический рисунок. Преодолевают барьер длинных слов через кинестетический ритм.</td><td><strong>Phonological Scaffolding:</strong> Мелкая моторика для осознания слоговой структуры.</td></tr>
+              <tr><td class="time-col">7:00 – 10:00</td><td><strong>Phase 3: Metamorphosis TPR.</strong><br>Be AN EGG! Caterpillar! Chrysalis! Butterfly! FLY!</td><td>Сворачиваются, ползают, замирают, «летают». Быстро переключаются между задачами.</td><td><strong>Self-Regulation:</strong> Контроль импульсов (Freeze в фазе Chrysalis).</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-elaborate">🚀 STAGE 4: ELABORATE — 15 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: The Origami Matrix.</strong><br>Let's make a magic book! Fold like a hamburger. Fold again like a hot dog. Open! 1, 2, 3, 4 windows!</td><td>Переводят метафоры (hamburger/hot dog) в физические действия. Нумеруют секторы.</td><td><strong>Spatial Awareness:</strong> Складывание структурирует пространство листа.</td></tr>
+              <tr><td class="time-col">3:00 – 10:00</td><td><strong>Phase 2: Visual Dictation.</strong><br>№1: Draw a green leaf and an EGG.<br>№2: Draw a CATERPILLAR. Crunch!<br>№3: CHRYSALIS. Sleeping. Shhh.<br>№4: Beautiful BUTTERFLY.<br>(Пишет слова) Write the names!</td><td>Трансформируют аудио в визуальный образ. Подписывают рисунки с опорой на доску.</td><td><strong>Formative Assessment:</strong> Рисунки наглядно показывают усвоение семантики.</td></tr>
+              <tr><td class="time-col">10:00 – 13:00</td><td><strong>Phase 3: The Mini-Presentation.</strong><br>(Маркер-микрофон). Test your partner!<br>A: (указывает на №2). What is it?<br>B: It's a caterpillar!</td><td>Работают в парах: «ведущий» и «эксперт». Используют It's a... в живой ситуации.</td><td><strong>4K — Communication:</strong> Peer-to-peer обучение.<br><strong>Agency:</strong> Ученик сам выбирает сектор.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-evaluate">✅ STAGE 5: EVALUATE — 5 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: True/False TPR.</strong><br><em>Rules:</em> YES → clap 👏! NO → stomp 🦶!<br>1. A butterfly can fly. 2. A caterpillar can swim. 3. An elephant is small. 4. A chrysalis is sleeping.</td><td>Мгновенно реагируют. Переключаются между хлопком и топом.</td><td><strong>Formative Assessment + CLIL Check.</strong></td></tr>
+              <tr><td class="time-col">3:00 – 4:00</td><td><strong>Phase 2: The "Fix It" Challenge.</strong><br>A spider has got TWO legs! Why not? Fix it!</td><td>Топают в знак несогласия. Исправляют: Eight! Eight legs!</td><td><strong>4K — Critical Thinking (HOTS):</strong> Мобилизация знаний для активного исправления ошибки.</td></tr>
+              <tr><td class="time-col">4:00 – 5:00</td><td><strong>Phase 3: The Password to Leave.</strong><br>(У двери) Forest is closing. Take off your hats! What comes after the egg?</td><td>(Хором) CATERPILLAR! Goodbye!</td><td><strong>Closure + Recall:</strong> Финальный вопрос закрепляет нейронный след цикла метаморфоза.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+      </div>
+
+      <div id="materials-section-5" class="materials-block">
+        <h3>🖨️ Дополнительные материалы к уроку 5</h3>
+        <button onclick="printMaterials('materials-gallery-5')" class="btn btn-materials" style="margin-bottom: 20px;">Распечатать все материалы (9 шт.)</button>
+        <div class="materials-grid" id="materials-gallery-5">
+          <img src="https://i.postimg.cc/8CZxzryL/1.png" onclick="openModal(this.src)" alt="1">
+          <img src="https://i.postimg.cc/xdfWQPPM/2.png" onclick="openModal(this.src)" alt="2">
+          <img src="https://i.postimg.cc/0NkLvCC7/3.png" onclick="openModal(this.src)" alt="3">
+          <img src="https://i.postimg.cc/SKSw4GG8/4.png" onclick="openModal(this.src)" alt="4">
+          <img src="https://i.postimg.cc/d0szF99T/5.png" onclick="openModal(this.src)" alt="5">
+          <img src="https://i.postimg.cc/BvSd3CCJ/6.png" onclick="openModal(this.src)" alt="6">
+          <img src="https://i.postimg.cc/kgFkLHWB/gpt-image-2-(medium)-a-Handout-10-Create.png" onclick="openModal(this.src)" alt="create">
+          <img src="https://i.postimg.cc/CxHW92bd/gpt-image-2-(medium)-a-Handout-12-My-Lear.png" onclick="openModal(this.src)" alt="learning">
+          <img src="https://i.postimg.cc/pdWgvBBx/gpt-image-2-(medium)-a-Handout-7-Jungle-V.png" onclick="openModal(this.src)" alt="jungle">
+        </div>
+      </div>
+    </article>
+
+    <!-- ==================== MODULE 6 (←— бывший Модуль 7: Weather) ==================== -->
+    <article id="module-6" class="tab-content">
+
+    <div class="module-header">
+        <h2>Lesson Plan 6: Yummy or Yuck? (Starlight 2, Module 6)</h2>
+        <div class="action-buttons">
+            <a href="#" onclick="generatePDF(event, 'lesson-content-6', 'Lesson_Plan_6_Yummy.pdf')" class="btn btn-pdf">📄 Скачать PDF план урока</a>
+            <a href="#materials-section-6" class="btn btn-materials">🖨️ Дополнительные материалы</a>
+        </div>
+    </div>
+
+    <div id="lesson-content-6">
+        <section class="objectives-block">
+            <h3>🎯 Learning Objectives</h3>
+            <div class="objectives-grid">
+                <div class="obj-card">
+                    <h4>Языковые (Language)</h4>
+                    <ul>
+                        <li><strong>Vocabulary:</strong> Сладости (chocolate, cake, juice, jam, lollipops). Полезная еда (carrots, oranges, bananas, potatoes).</li>
+                        <li><strong>Grammar:</strong> Present Simple (preferences): I like... / I don't like... General Question: Do you like...? — Yes, I do. / No, I don't.</li>
+                    </ul>
+                </div>
+                <div class="obj-card">
+                    <h4>Предметные (CLIL &amp; 4К)</h4>
+                    <ul>
+                        <li><strong>Culture:</strong> Знакомство с традициями: Итальянское джелато vs Английское мороженое.</li>
+                        <li><strong>Health:</strong> Различение "Sweet Tooth" (сладкоежки) и "Healthy Food" (полезная еда).</li>
+                        <li><strong>4K:</strong> Critical Thinking, Agency, Collaboration, Creativity.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="stage-block">
+            <h3 class="stage-title stage-engage">⚡ STAGE 1: ENGAGE (Вовлечение) — 7 минут</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Время</th>
+                            <th>Действия и речь учителя (T)</th>
+                            <th>Действия и речь обучающихся (Ss)</th>
+                            <th>Методический комментарий (CLIL &amp; 4К)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="time-col">0:00 – 2:00</td>
+                            <td><strong>Phase 1: The Giant Awakens.</strong><br><strong>T:</strong> (Голос ниже, тяжелые шаги). Hello! I am a GIANT. A very hungry Giant!<br><strong>T:</strong> (Стучит по зубу). Look at my tooth! Ding! I have got a Sweet Tooth! I love sweet food!</td>
+                            <td><strong>Ss:</strong> Переходят в состояние, копируя позу великана.<br><strong>Ss:</strong> Считывают идиому Sweet Tooth через жест, понимая концепт без перевода.</td>
+                            <td><strong>Neuromodulation &amp; Cultural Scaffolding:</strong> Смена роли снижает тревожность. Вводится идиоматический пласт языка через визуальную метафору.</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">2:00 – 4:00</td>
+                            <td><strong>Phase 2: The Taste Lab.</strong><br><strong>T:</strong> (Имитирует шоколад). Chocolate! Crunch! Mmm! Yummy! I like chocolate! (Гладят живот).<br><strong>T:</strong> (Имитирует лимон). A lemon! Bite! (Резко кривится). Yuck! I don't like lemons! (Отталкивает руками).</td>
+                            <td><strong>Ss:</strong> Рефлекторно морщатся или улыбаются вслед за учителем.<br><strong>Ss:</strong> Физически проживают отрицание и утверждение всем телом.</td>
+                            <td><strong>Embodied Cognition:</strong> Мы кодируем <em>I like</em> как расслабление, а <em>I don't like</em> как мышечный зажим. Грамматика становится «физиологичной».</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">4:00 – 7:00</td>
+                            <td><strong>Phase 3: The Yummy/Yuck Test.</strong><br><strong>T:</strong> Giants, show me! Cake! → <strong>Ss:</strong> Yummy!<br><strong>T:</strong> Juice! → <strong>Ss:</strong> Yummy!<br><strong>T:</strong> (Провокация) Carrots!<br><strong>T:</strong> Oh! Masha likes carrots, but Dima says Yuck! That's okay!</td>
+                            <td><strong>Ss:</strong> Гладят животы или выражают протест в зависимости от личных предпочтений.<br><strong>Ss:</strong> Принимают самостоятельное решение.</td>
+                            <td><strong>4K — Critical Thinking &amp; Agency:</strong> Провокация заставляет ребенка совершить внутренний выбор, развивая субъектность и эмоциональный интеллект.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="stage-block">
+            <h3 class="stage-title stage-explore">🔍 STAGE 2: EXPLORE (Исследование) — 10 минут</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Время</th>
+                            <th>Действия и речь учителя (T)</th>
+                            <th>Действия и речь обучающихся (Ss)</th>
+                            <th>Методический комментарий (CLIL &amp; 4К)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="time-col">0:00 – 2:00</td>
+                            <td><strong>Phase 1: Notebook Setup.</strong><br><strong>T:</strong> Draw a line. (Показывает, как разделить страницу).<br><strong>T:</strong> On the left: draw a Tooth. On the right: draw a Strong Arm.</td>
+                            <td><strong>Ss:</strong> Открывают тетради, разделяют страницу линией.<br><strong>Ss:</strong> Рисуют пиктограммы (зуб и бицепс) вверху колонок.</td>
+                            <td><strong>Spatial Organization:</strong> Самостоятельное создание таблицы развивает навыки планирования пространства листа.</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">2:00 – 6:00</td>
+                            <td><strong>Phase 2: Sorting Dictation.</strong><br><strong>T:</strong> (Показывает "Apple"). Where is the apple? Write APPLE under the Strong Arm.<br><strong>T:</strong> (Показывает "Candy"). And the candy? Write CANDY under the Tooth.</td>
+                            <td><strong>Ss:</strong> <em>Apple is for the body!</em> Записывают слово в нужную колонку.<br><strong>Ss:</strong> <em>Candy is for the sweet tooth!</em> Фиксируют слово слева.</td>
+                            <td><strong>CLIL (Biology) &amp; Literacy:</strong> Письмо как результат анализа. Ребенок соотносит категорию продукта с его написанием.</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">6:00 – 10:00</td>
+                            <td><strong>Phase 3: The "Self-Check" Challenge.</strong><br><strong>T:</strong> (Закрывает часть слов). Check your spelling!<br><strong>T:</strong> Look at your friend's book. Is it correct? Give a green star for 5 correct words!</td>
+                            <td><strong>Ss:</strong> Сверяют записи с доской.<br><strong>Ss:</strong> Обмениваются тетрадями. (Шепотом) C-A-N-D-Y. Yes! Correct!<br><strong>Ss:</strong> Рисуют зеленую звездочку.</td>
+                            <td><strong>4K — Collaboration &amp; Critical Thinking:</strong> Взаимопроверка учит замечать детали в безопасной среде. Формируется учебная ответственность.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="stage-block">
+            <h3 class="stage-title stage-explain">💡 STAGE 3: EXPLAIN (Объяснение) — 8 минут</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Время</th>
+                            <th>Действия и речь учителя (T)</th>
+                            <th>Действия и речь обучающихся (Ss)</th>
+                            <th>Методический комментарий (CLIL &amp; 4К)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="time-col">0:00 – 4:00</td>
+                            <td><strong>Phase 1: The World Tour.</strong><br><strong>T:</strong> (Рисует Италию). Look! Italy. In Italy, ice cream is Gelato!<br><strong>T:</strong> (Рисует рожок). In the UK, it's a Flake! A chocolate stick.<br><strong>T:</strong> I like Gelato! (Вопросительно смотрит на класс).</td>
+                            <td><strong>Ss:</strong> С интересом следят за рисованием.<br><strong>Ss:</strong> (Хором) Gelato! Flake!<br><strong>Ss:</strong> Сравнивают мороженое со своим опытом.</td>
+                            <td><strong>Cultural CLIL:</strong> Знание о Gelato и Flake дает контекст реального мира, делая язык инструментом познания.</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">4:00 – 7:00</td>
+                            <td><strong>Phase 2: The Grammar Target.</strong><br><strong>T:</strong> Dima, DO YOU LIKE gelato? ⤴️ (Рисует стрелку вверх, показывает 👍). Yes, I DO!<br><strong>T:</strong> Masha, DO YOU LIKE onions? ⤴️ (Морщится 👎). No, I DON'T!</td>
+                            <td><strong>Ss:</strong> Наблюдают за мимикой. Отвечают с жестами: 👍 / 👎.<br><strong>Ss:</strong> Утрируют восходящую интонацию в вопросе.</td>
+                            <td><strong>Grammar as Lexical Chunks:</strong> Интонационная стрелка помогает визуализировать мелодику вопроса как неделимой единицы смысла.</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">7:00 – 10:00</td>
+                            <td><strong>Phase 3: Ping-Pong Drill.</strong><br><strong>T:</strong> Group A, ask about CAKE! Group B, answer!<br><strong>T:</strong> Group A, ask about SPIDERS!</td>
+                            <td><strong>Group A:</strong> Do you like cake? ⤴️<br><strong>Group B:</strong> (Гладят животы) Yes, I do!<br><strong>Group A:</strong> Do you like SPIDERS? ⤴️<br><strong>Group B:</strong> (Скрещивают руки) No, I don't!</td>
+                            <td><strong>Lowering Affective Filter:</strong> Хоровая отработка снимает барьер.<br><strong>Recycling:</strong> Слово <em>spiders</em> активирует старую лексику.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="stage-block">
+            <h3 class="stage-title stage-elaborate">🚀 STAGE 4: ELABORATE (Разработка / Практика) — 15 минут</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Время</th>
+                            <th>Действия и речь учителя (T)</th>
+                            <th>Действия и речь обучающихся (Ss)</th>
+                            <th>Методический комментарий (CLIL &amp; 4К)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="time-col">0:00 – 5:00</td>
+                            <td><strong>Phase 1: Menu Creation.</strong><br><strong>T:</strong> Let's make a Menu! Draw 3 Yummy foods! Write the names. Use the board!<br><strong>T:</strong> (Ходит по классу, поощряя выбор).</td>
+                            <td><strong>Ss:</strong> Складывают листы книжкой, рисуют 3 любимых продукта.<br><strong>Ss:</strong> Списывают названия с доски.</td>
+                            <td><strong>4K — Creativity &amp; Agency:</strong> Ребенок сам выбирает контент. Списывание с доски снимает когнитивную нагрузку при письме.</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">5:00 – 10:00</td>
+                            <td><strong>Phase 2: The Survey.</strong><br><strong>T:</strong> Stand up! Take your menus. Talk to 3 friends!<br><strong>T:</strong> YES = High Five ✋! NO = Shrug 🤷.</td>
+                            <td><strong>Ss:</strong> Перемещаются по классу.<br><strong>S1:</strong> Do you like cake? ⤴️<br><strong>S2:</strong> Yes, I do! ✋ / No, I don't! 🤷</td>
+                            <td><strong>Authentic Communication:</strong> Жесты превращают диалог в азартный поиск совпадений. TPR-подкрепление снижает барьер.</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">10:00 – 13:00</td>
+                            <td><strong>Phase 3: The Reporter.</strong><br><strong>T:</strong> Sit down, Giants!<br><strong>T:</strong> Dima, does Masha like chocolate? Anya, who likes juice?</td>
+                            <td><strong>Ss:</strong> Занимают места. Отвечают на вопросы о партнерах.<br><strong>Ss:</strong> Слушают ответы одноклассников, сверяя со своим опытом.</td>
+                            <td><strong>Active Listening Check:</strong> Приучает запоминать ответ партнера. Мягкий ввод формы 3-го лица (likes) для аудирования.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="stage-block">
+            <h3 class="stage-title stage-evaluate">✅ STAGE 5: EVALUATE (Оценка) — 5 минут</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Время</th>
+                            <th>Действия и речь учителя (T)</th>
+                            <th>Действия и речь обучающихся (Ss)</th>
+                            <th>Методический комментарий (CLIL &amp; 4К)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="time-col">0:00 – 3:00</td>
+                            <td><strong>Phase 1: Yes/No Chairs.</strong><br><strong>T:</strong> If it's YES, I DO → stand tall! If it's NO, I DON'T → sit down!<br><strong>T:</strong> Do you like cake? Do you like... FROGS? 🐸 Do you like spiders? 🕷️</td>
+                            <td><strong>Ss:</strong> Вскакивают на ноги при положительном ответе.<br><strong>Ss:</strong> Резко садятся при «страшных» словах.</td>
+                            <td><strong>Formative Assessment:</strong> Слова-подвохи (frogs, spiders) проверяют, что дети декодируют значение, а не просто копируют интонацию.</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">3:00 – 4:30</td>
+                            <td><strong>Phase 2: The Missing Letter.</strong><br><strong>T:</strong> Look! The Hungry Giant ate the letters!<br><strong>T:</strong> (Пишет: C  *K E). Help me!<br><strong>T:</strong> (Пишет: J*  I C E).</td>
+                            <td><strong>Ss:</strong> Успокаиваются. Выкрикивают буквы: A! Cake! U! Juice!<br><strong>Ss:</strong> Наблюдают за восстановлением слов.</td>
+                            <td><strong>Phonics &amp; Sight Words:</strong> Тренировка визуального распознавания слов. Профилактика ошибок при письме.</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">4:30 – 5:00</td>
+                            <td><strong>Phase 3: The Closure.</strong><br><strong>T:</strong> You are super smart! The Giant is full! (Гладит живот).<br><strong>T:</strong> Goodbye, everyone!</td>
+                            <td><strong>Ss:</strong> Goodbye!</td>
+                            <td><strong>Closure:</strong> Возвращение к персонажу Великана дает чувство завершенности и успеха («я накормил Великана»).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <div id="materials-section-6" class="materials-block">
+        <h3>🖨️ Дополнительные материалы к уроку 6</h3>
+        <p>Нажмите на любое изображение, чтобы рассмотреть его поближе. Для вывода на печать нажмите кнопку ниже.</p>
+        <button onclick="printMaterials('materials-gallery-6')" class="btn btn-materials" style="margin-bottom: 20px;">Распечатать все материалы (11 шт.)</button>
+        <div class="materials-grid" id="materials-gallery-6">
+            <img src="https://i.postimg.cc/sgwbY8rn/6-1.png" alt="Yummy or Yuck Page 1" onclick="openModal(this.src)">
+            <img src="https://i.postimg.cc/htpNLwB2/6-2.png" alt="Yummy or Yuck Page 2" onclick="openModal(this.src)">
+            <img src="https://i.postimg.cc/y8v2m5Hv/6-3.png" alt="Yummy or Yuck Page 3" onclick="openModal(this.src)">
+            <img src="https://i.postimg.cc/Gmq6FNCK/6-4.png" alt="Yummy or Yuck Page 4" onclick="openModal(this.src)">
+            <img src="https://i.postimg.cc/Z5VX8gSd/6-5.png" alt="Yummy or Yuck Page 5" onclick="openModal(this.src)">
+            <img src="https://i.postimg.cc/3xnzX6TD/6-6.png" alt="Yummy or Yuck Page 6" onclick="openModal(this.src)">
+            <img src="https://i.postimg.cc/FH92Jv2b/gpt-image-2-(medium)-a-Handout-Giant-s-R.png" alt="Giant's Handout" onclick="openModal(this.src)">
+            <img src="https://i.postimg.cc/qvk9Cr9G/gpt-image-2-(medium)-a-Restaurant-Role-Pla.png" alt="Restaurant Role Play" onclick="openModal(this.src)">
+            <img src="https://i.postimg.cc/g2N1V5W1/gpt-image-2-(medium)-a-novyj-rabocij-list.png" alt="Worksheet 1" onclick="openModal(this.src)">
+            <img src="https://i.postimg.cc/nh0N45J6/gpt-image-2-(medium)-a-novyj-rabocij-list-b.png" alt="Worksheet 2" onclick="openModal(this.src)">
+            <img src="https://i.postimg.cc/1zX2JHmj/gpt-image-2-(medium)-a-rabocij-list-Heade.png" alt="Worksheet Header" onclick="openModal(this.src)">
+        </div>
+    </div>
+</article>
+
+    <article id="module-7" class="tab-content">
+      <div class="module-header">
+        <h2>Lesson Plan 7: What's the Weather Like? (Starlight 2, Module 7)</h2>
+        <div class="action-buttons">
+          <a href="#" onclick="generatePDF(event, 'lesson-content-7', 'Lesson_Plan_6.pdf')" class="btn btn-pdf">📄 Скачать PDF план урока</a>
+          <a href="#materials-section-7" class="btn btn-materials">🖨️ Дополнительные материалы</a>
+        </div>
+      </div>
+      <div id="lesson-content-7">
+        <section class="objectives-block">
+          <h3>🎯 Learning Objectives</h3>
+          <div class="objectives-grid">
+            <div class="obj-card">
+              <h4>Языковые (Language)</h4>
+              <ul>
+                <li><strong>Vocabulary:</strong> hot, cold, sunny, raining, snowing; spring, summer, autumn, winter.</li>
+                <li><strong>Grammar:</strong> Present Continuous для погоды (It is raining/snowing). Прилагательные (It is hot/sunny).</li>
+              </ul>
+            </div>
+            <div class="obj-card">
+              <h4>Предметные (CLIL &amp; 4К)</h4>
+              <ul>
+                <li><strong>Geography:</strong> Связь погоды и времен года.</li>
+                <li><strong>Culture:</strong> Климат в разных странах (Греция vs Британия).</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-engage">⚡ STAGE 1: ENGAGE — 7 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: The Magic Window.</strong><br>(Рисует в воздухе окно) Squeeeak!<br>(Дрожит) Brrr! It's COLD! (Машет веером) Phew! It's HOT!<br>(Открывает зонт) Oh! It's RAINING!</td><td>Завороженно следят. Рефлекторно ежатся или обмахиваются. (Шепотом) Cold... Hot... Raining...</td><td><strong>Embodied Cognition:</strong> Дрожь/расслабление тела создают нейронный путь к значению.</td></tr>
+              <tr><td class="time-col">3:00 – 5:00</td><td><strong>Phase 2: Weather Symphony.</strong><br>Sunny! (Круг руками). Snowing! (Снежинки вниз). Raining! (Стучит пальцами по парте). Faster!</td><td>Рисуют солнце. Опускают руки-снежинки. Создают шум ливня, барабаня по партам.</td><td><strong>Multisensory Learning:</strong> Стук добавляет аудиальный канал. «Озвучивание» погоды.</td></tr>
+              <tr><td class="time-col">5:00 – 7:00</td><td><strong>Phase 3: Reality Check.</strong><br>(Подходит к окну) And look... What's the weather like today?</td><td>Смотрят в окно, анализируют реальность. (Хором) It's cold! It's snowing!</td><td><strong>Authentic Context:</strong> Мост к функциональному языку. Английский описывает жизнь детей сейчас.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-explore">🔍 STAGE 2: EXPLORE — 10 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: Board Setup.</strong><br>(Делит доску на 4 сектора) Spring (🌸), Summer (☀️), Autumn (🍂), Winter (⛄).</td><td>(Хором) Spring! Summer! Autumn! Winter! Копируют жесты для каждого сезона.</td><td><strong>Graphic Organizers:</strong> Доска как Mind Map. Визуальные символы как Scaffolding.</td></tr>
+              <tr><td class="time-col">3:00 – 6:00</td><td><strong>Phase 2: The Matching Game.</strong><br>Listen! It is snowing and very cold!<br>It is raining and windy. Leaves are yellow.</td><td>Внимательно слушают. (Кричат ответ) Winter! Autumn! Анализируют признаки.</td><td><strong>4K — Critical Thinking:</strong> Дедуктивный анализ: от частных признаков к общему выводу.</td></tr>
+              <tr><td class="time-col">6:00 – 10:00</td><td><strong>Phase 3: The Geography Spot.</strong><br>This is the UK. In summer it is sunny... but sometimes raining!<br>This is Greece. In summer it is VERY hot.</td><td>Рассматривают карту мира. Удивляются дождю летом в Англии. Сравнивают со своим климатом.</td><td><strong>Cultural CLIL:</strong> Развитие межкультурного интеллекта.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-explain">💡 STAGE 3: EXPLAIN — 8 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: The "ING" Tail.</strong><br>(Пишет: rain + ing, дорисовывает хвост змеи 🐍). Action happening NOW!</td><td>Следят за «вырастанием» хвоста. (Нараспев) Rain-ing... Snow-ing... Имитируют длительность волнообразным движением.</td><td><strong>Visual Scaffolding:</strong> Хвост -ing — визуальный маркер процесса.</td></tr>
+              <tr><td class="time-col">3:00 – 6:00</td><td><strong>Phase 2: The Contrast Rule.</strong><br>Sunny, Hot, Cold — Stop! No tail here! Это вопрос «Какая?». It is SUNNY!</td><td>Осознают разницу между действием и качеством. (Хором) It is sunny! It is hot!</td><td><strong>Cognitive Linguistics:</strong> Логика языка вместо зазубривания. Профилактика «it is hotting».</td></tr>
+              <tr><td class="time-col">6:00 – 8:00</td><td><strong>Phase 3: Fast-Paced Drilling.</strong><br>(Быстро меняет карточки) Look and say! Quick!</td><td>Мгновенно реагируют: It is sunny! It is raining! Соревнуются в скорости.</td><td><strong>Pattern Practice:</strong> Высокий темп отключает внутренний переводчик.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-elaborate">🚀 STAGE 4: ELABORATE — 15 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 4:00</td><td><strong>Phase 1: The Blueprint.</strong><br>Шаблон: 1. My favourite season is **. 2. It is** . 3. I am __ing.</td><td>Изучают структуру. Выбирают из «Меню действий» (skiing, swimming) глагол.</td><td><strong>Scaffolding:</strong> Шаблон работает как навигатор.</td></tr>
+              <tr><td class="time-col">4:00 – 11:00</td><td><strong>Phase 2: The Art Studio.</strong><br>Draw your season! Draw YOU! (Помогает со спеллингом).</td><td>Рисуют себя внутри сезона. Заполняют пропуски в шаблоне.</td><td><strong>Differentiation:</strong> Разноуровневое обучение.</td></tr>
+              <tr><td class="time-col">11:00 – 15:00</td><td><strong>Phase 3: The Exhibition.</strong><br>Show your card to your partner. Say: "Good job!"</td><td>S1: My favourite season is winter. It is cold. I am skiing! S2: Wow! Good job!</td><td><strong>4K — Communication:</strong> Текст пишется, чтобы быть прочитанным.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-evaluate">✅ STAGE 5: EVALUATE — 5 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: The Live Broadcast.</strong><br>(Маркер-микрофон) I am a Weather Reporter! Petya! Does it rain in Winter?</td><td>S1: No! It is snowing! S2: No, it's cold.</td><td><strong>4K — Critical Thinking:</strong> Спонтанный ответ на основе опыта.</td></tr>
+              <tr><td class="time-col">3:00 – 4:00</td><td><strong>Phase 2: Flash TPR.</strong><br>Stop! Everyone, show me SNOWING! Show me HOT!</td><td>Изображают снег пальчиками или обмахиваются.</td><td><strong>Classroom Management:</strong> Смена фокуса снимает статическую усталость.</td></tr>
+              <tr><td class="time-col">4:00 – 5:00</td><td><strong>Phase 3: The Exit Ticket.</strong><br>(Показывает карточку с дождем) Magic password!</td><td>(Хором) IT IS RAINING! Goodbye, teacher!</td><td><strong>Grammar Accuracy:</strong> Фокус на точности формы перед выходом.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+      </div>
+
+      <div id="materials-section-7" class="materials-block">
+        <h3>🖨️ Дополнительные материалы к уроку 6</h3>
+        <button onclick="printMaterials('materials-gallery-7')" class="btn btn-materials" style="margin-bottom: 20px;">Распечатать все материалы (9 шт.)</button>
+        <div class="materials-grid" id="materials-gallery-7">
+          <img src="https://i.postimg.cc/Pxsm7XbZ/7-1.png" onclick="openModal(this.src)" alt="7-1">
+          <img src="https://i.postimg.cc/9M5GkmPy/7-2.png" onclick="openModal(this.src)" alt="7-2">
+          <img src="https://i.postimg.cc/hjW9YD8Q/7-3.png" onclick="openModal(this.src)" alt="7-3">
+          <img src="https://i.postimg.cc/NMq1ns89/7-4.png" onclick="openModal(this.src)" alt="7-4">
+          <img src="https://i.postimg.cc/KYgPQkTt/7-5.png" onclick="openModal(this.src)" alt="7-5">
+          <img src="https://i.postimg.cc/nLQ4TjmQ/7-6.png" onclick="openModal(this.src)" alt="7-6">
+          <img src="https://i.postimg.cc/FKJyGdSH/gpt-image-2-(medium)-a-A4-portrait-ESL-Ge.png" onclick="openModal(this.src)" alt="geo">
+          <img src="https://i.postimg.cc/43h6w7c3/gpt-image-2-(medium)-a-A4-portrait-ESL-work.png" onclick="openModal(this.src)" alt="ws1">
+          <img src="https://i.postimg.cc/ZK76SFFF/gpt-image-2-(medium)-a-A4-portrait-printabl.png" onclick="openModal(this.src)" alt="ws2">
+        </div>
+      </div>
+    </article>
+
+    <article id="module-8" class="tab-content">
+      <div class="module-header">
+        <h2>Lesson Plan 8: The Scarecrow's Wardrobe (Starlight 2, Module 8)</h2>
+        <div class="action-buttons">
+          <a href="#" onclick="generatePDF(event, 'lesson-content-8', 'Lesson_Plan_7.pdf')" class="btn btn-pdf">📄 Скачать PDF план урока</a>
+          <a href="#materials-section-8" class="btn btn-materials">🖨️ Дополнительные материалы</a>
+        </div>
+      </div>
+      <div id="lesson-content-8">
+        <section class="objectives-block">
+          <h3>🎯 Learning Objectives</h3>
+          <div class="objectives-grid">
+            <div class="obj-card">
+              <h4>Языковые (Language)</h4>
+              <ul>
+                <li><strong>Vocabulary:</strong> boots, jacket, jeans, dress, hat, T-shirt, socks, shorts, vest, jumper.</li>
+                <li><strong>Grammar:</strong> Present Continuous (I am/He is wearing), Imperatives (Put on/Take off), Adjectives (Big/Small).</li>
+              </ul>
+            </div>
+            <div class="obj-card">
+              <h4>Предметные (CLIL &amp; 4К)</h4>
+              <ul>
+                <li><strong>Art &amp; Design:</strong> Подбор одежды по сезону.</li>
+                <li><strong>Maths/Logic:</strong> Сравнение размеров.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-engage">⚡ STAGE 1: ENGAGE — 7 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 2:00</td><td><strong>Phase 1: The Bridge.</strong><br>(Рисует ☀️) What's the weather like?<br>(Имитирует жару) I am hot! I take off my jacket!</td><td>(Хором) It's sunny! It's hot! Наблюдают за пантомимой, понимая связь температуры и одежды.</td><td><strong>CLIL (Science):</strong> Адаптивные реакции организма. Декодирование take off без перевода.</td></tr>
+              <tr><td class="time-col">2:00 – 5:00</td><td><strong>Phase 2: TPR Dress Up.</strong><br>Brrr! It's cold! Put on your hat!<br>It's raining! Put on your boots!</td><td>Копируют моторные паттерны (надевание, натягивание). Проговаривают Put on / Take off в момент действия.</td><td><strong>Embodied Cognition:</strong> «К себе» (защита) и «от себя» (освобождение) кодируют глаголы.</td></tr>
+              <tr><td class="time-col">5:00 – 7:00</td><td><strong>Phase 3: Lexical Anchoring.</strong><br>Jeans! Put on! Fast! Jumper! Take off!</td><td>Мгновенно выполняют действия. Отключают механизм внутреннего перевода.</td><td><strong>Нейропедагогика:</strong> Активация внимания через ритм.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-explore">🔍 STAGE 2: EXPLORE — 10 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: Visual Setup.</strong><br>Look! The wind is strong! The Bears' clothes are on the line.<br>(Размещает пары: огромный vs крошечный предмет).</td><td>Идентифицируют одежду. Наблюдают за визуальной аномалией размеров. Готовятся к логической задаче.</td><td><strong>CLIL (Math):</strong> Относительность величин.<br><strong>4К:</strong> Креативность через игровую ситуацию.</td></tr>
+              <tr><td class="time-col">3:00 – 6:00</td><td><strong>Phase 2: Concept Check.</strong><br>(На шорты Папы) Are these for Baby Bear? Are they small?</td><td>Анализируют соответствие. (Хором) No! They are BIG! Закрепляют пару Big — Small.</td><td><strong>4К (Critical Thinking):</strong> Инференция из визуального несоответствия.</td></tr>
+              <tr><td class="time-col">6:00 – 10:00</td><td><strong>Phase 3: Sorting Game.</strong><br>Masha, find the vest for Baby Bear. Is it big or small?</td><td>S1: It is small. Остальные наблюдают и корректируют.</td><td><strong>CLIL (Logic):</strong> Операция Sorting — база математического мышления.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-explain">💡 STAGE 3: EXPLAIN — 8 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: The Character.</strong><br>Look! This is Mr. Straw (пугало). He is cold! Brrr!</td><td>Идентифицируют состояние персонажа. (Шепотом) Poor Mr. Straw! Готовы помогать.</td><td><strong>4К (Empathy):</strong> Эмоциональный триггер.<br><strong>CLIL:</strong> Social-Emotional Learning.</td></tr>
+              <tr><td class="time-col">3:00 – 7:00</td><td><strong>Phase 2: Dressing Up.</strong><br>Blue jeans! Look: He IS WEARING blue jeans. (Выделяет структуру интонационно).</td><td>Наблюдают за «наращиванием» фразы. (Хором) He is wearing a red hat!</td><td><strong>Visual Grammar:</strong> Грамматика как chunk (блок).</td></tr>
+              <tr><td class="time-col">7:00 – 10:00</td><td><strong>Phase 3: Personalization.</strong><br>I'm wearing a white shirt. Masha, what are you wearing?</td><td>S1: I'm wearing a blue dress. Осматривают себя, соотнося теорию с реальностью.</td><td><strong>Personalization:</strong> Личностная значимость — критический фактор запоминания.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-elaborate">🚀 STAGE 4: ELABORATE — 15 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: The Brief.</strong><br>Draw a friend for Mr. Straw! Summer friend ☀️ or Winter friend ❄️?</td><td>Анализируют задачу и выбирают сезон. Соотносят климат с набором одежды.</td><td><strong>CLIL (Science):</strong> Решения на основе экологических факторов.</td></tr>
+              <tr><td class="time-col">3:00 – 9:00</td><td><strong>Phase 2: Design &amp; Write.</strong><br>Use the board bank! (Шаблон: He is wearing...)</td><td>Рисуют и подписывают: 1. It is Winter. 2. He is wearing a red hat.</td><td><strong>4К (Creativity):</strong> Самовыражение с визуальной опорой.</td></tr>
+              <tr><td class="time-col">9:00 – 13:00</td><td><strong>Phase 3: Pair Review.</strong><br>Change your pictures! What is the weather?</td><td>S1: It is Summer! S2: Yes! He is wearing a T-shirt.</td><td><strong>4К (Communication):</strong> Information Gap. Мотивация говорить.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="stage-block">
+          <h3 class="stage-title stage-evaluate">✅ STAGE 5: EVALUATE — 5 минут</h3>
+          <div class="table-container"><table>
+            <thead><tr><th>Время</th><th>Учитель (T)</th><th>Обучающиеся (Ss)</th><th>Комментарий</th></tr></thead>
+            <tbody>
+              <tr><td class="time-col">0:00 – 3:00</td><td><strong>Phase 1: Fashion Police.</strong><br>Stand up if you are wearing JEANS!</td><td>Проводят аудит гардероба. Те, на ком джинсы — встают.</td><td><strong>4К (Critical Thinking):</strong> Соответствие слова и реальности.</td></tr>
+              <tr><td class="time-col">3:00 – 4:00</td><td><strong>Phase 2: Touch Drill.</strong><br>Touch your SOCKS! Touch your SHOES!</td><td>Физически касаются объектов.</td><td><strong>Kinesthetic Check.</strong> Мгновенное выявление трудностей.</td></tr>
+              <tr><td class="time-col">4:00 – 5:00</td><td><strong>Phase 3: Exit Ticket.</strong><br>(Показывает куртку) Is it for Summer? What is it?</td><td>No! It's for Winter! It's a jacket! Goodbye!</td><td><strong>CLIL (Reasoning):</strong> Функциональное назначение предмета.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+      </div>
+
+      <div id="materials-section-8" class="materials-block">
+        <h3>🖨️ Дополнительные материалы к уроку 7</h3>
+        <button onclick="printMaterials('materials-gallery-8')" class="btn btn-materials" style="margin-bottom: 20px;">Распечатать все материалы (10 шт.)</button>
+        <div class="materials-grid" id="materials-gallery-8">
+          <img src="https://i.postimg.cc/YqTFy2zX/8-1.png" onclick="openModal(this.src)" alt="8-1">
+          <img src="https://i.postimg.cc/Qxv7nNJb/8-2.png" onclick="openModal(this.src)" alt="8-2">
+          <img src="https://i.postimg.cc/CL986Msm/8-3.png" onclick="openModal(this.src)" alt="8-3">
+          <img src="https://i.postimg.cc/4NYt5HVV/8-4.png" onclick="openModal(this.src)" alt="8-4">
+          <img src="https://i.postimg.cc/ncX7k9Bv/8-5.png" onclick="openModal(this.src)" alt="8-5">
+          <img src="https://i.postimg.cc/QxF5bK1k/8-6.png" onclick="openModal(this.src)" alt="8-6">
+          <img src="https://i.postimg.cc/gkxRDL8H/8-7.png" onclick="openModal(this.src)" alt="8-7">
+          <img src="https://i.postimg.cc/15bFYRrv/gemini-3-pro-image-preview-2k-(nano-banana-pro)-a-Handout-for-printing.png" onclick="openModal(this.src)" alt="handout">
+          <img src="https://i.postimg.cc/VL2tHsW3/gemini-3-pro-image-preview-2k-(nano-banana-pro)-a-Zagolovok-Big-or-Sm.png" onclick="openModal(this.src)" alt="big-small">
+          <img src="https://i.postimg.cc/28gWXjxR/gpt-image-2-(medium)-a-Dress-Mr-Straw.png" onclick="openModal(this.src)" alt="mr-straw">
+        </div>
+      </div>
+    </article>
+
+    <!-- ==================== DIAGNOSTICS ==================== -->
+    <article id="module-diagnostics" class="tab-content">
+      <div class="module-header">
+        <h2>📊 Диагностический инструментарий</h2>
+        <p style="color:var(--text-light); font-size:0.95rem;">Оценка развития 4К-компетенций | 2 класс | CLIL + 5E</p>
+        <div class="action-buttons">
+          <button onclick="window.print()" class="btn btn-pdf">🖨️ Распечатать материалы</button>
+        </div>
+      </div>
+
+      <section class="stage-block">
+        <h3 class="stage-title" style="background: linear-gradient(135deg, var(--primary), var(--secondary));">1. Обзор комплекта инструментов</h3>
+        <div style="background:#f9ede0; border-left:4px solid var(--accent); padding:16px; margin:18px 0; border-radius:0 8px 8px 0;">
+          <strong>Назначение:</strong> Систематическое наблюдение и фиксация динамики развития 4К-компетенций у учащихся 2 класса в рамках CLIL и модели 5E.
+        </div>
+        <h4>📦 Состав комплекта:</h4>
+        <div class="objectives-grid">
+          <div class="obj-card"><h4>1. Лист наблюдения на уроке</h4><p><strong>Для кого:</strong> Учитель, наблюдатель<br><strong>Когда:</strong> Во время урока (Explore и Elaborate)<br><strong>Фокус:</strong> Индикаторы 4К в реальном времени</p></div>
+          <div class="obj-card"><h4>2. Матрица видеоанализа</h4><p><strong>Для кого:</strong> Учитель, методист<br><strong>Когда:</strong> После урока при просмотре видео<br><strong>Фокус:</strong> 12 индикаторов по шкале (В-У-И-Э)</p></div>
+          <div class="obj-card"><h4>3. Анкета самооценки ученика</h4><p><strong>Для кого:</strong> Ученик 2 класса<br><strong>Когда:</strong> В конце урока или недели<br><strong>Фокус:</strong> Рефлексия собственной деятельности</p></div>
+          <div class="obj-card"><h4>4. Протокол рефлексии педагога</h4><p><strong>Для кого:</strong> Учитель<br><strong>Когда:</strong> После урока (10-15 мин)<br><strong>Фокус:</strong> Анализ, зоны роста, решения</p></div>
+        </div>
+        <h4 style="margin-top: 28px;">🎯 Шкала субъектности (4 уровня)</h4>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Уровень</th><th>Обозначение</th><th>Характеристика</th><th>Примеры поведения</th></tr></thead>
+            <tbody>
+              <tr><td><span class="level-badge badge-v">В</span></td><td><strong>ВЕДОМЫЙ</strong></td><td>Пассивный наблюдатель; ждёт указаний</td><td>Молчит, копирует действия других, не проявляет инициативы</td></tr>
+              <tr><td><span class="level-badge badge-u">У</span></td><td><strong>УЧАСТНИК</strong></td><td>Активный исполнитель; работает по образцу</td><td>Отвечает по sentence frame, выполняет свою роль в группе</td></tr>
+              <tr><td><span class="level-badge badge-i">И</span></td><td><strong>ИНИЦИАТОР</strong></td><td>Инициирует действия; предлагает идеи</td><td>Задаёт вопросы без подсказки, предлагает варианты</td></tr>
+              <tr><td><span class="level-badge badge-e">Э</span></td><td><strong>ЭКСПЕРТ</strong></td><td>Лидер и ресурс для группы</td><td>Координирует группу, создаёт новое, объясняет другим</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="stage-block">
+        <h3 class="stage-title" style="background: linear-gradient(135deg, var(--primary), var(--secondary));">2. Лист наблюдения на уроке</h3>
+        <div style="background:#f9ede0; border-left:4px solid var(--accent); padding:16px; margin:18px 0; border-radius:0 8px 8px 0;"><strong>Инструкция:</strong> Заполняется во время урока. Фокус на 3-4 учениках за одно наблюдение.</div>
+        <div class="table-container" style="margin-bottom:20px;">
+          <table>
+            <tr><td width="15%"><strong>Дата:</strong></td><td width="35%"><input type="date"></td><td width="15%"><strong>Класс:</strong></td><td width="35%"><input type="text" placeholder="2А"></td></tr>
+            <tr><td><strong>Тема:</strong></td><td colspan="3"><input type="text" placeholder="Wild Animals"></td></tr>
+            <tr><td><strong>Ученики:</strong></td><td colspan="3"><div style="display:flex;gap:10px;"><input type="text" placeholder="Ученик 1"><input type="text" placeholder="Ученик 2"><input type="text" placeholder="Ученик 3"><input type="text" placeholder="Ученик 4"></div></td></tr>
+          </table>
+        </div>
+        <h4>🧠 Критическое мышление и 💡 Креативность</h4>
+        <div class="table-container">
+          <table>
+            <thead><tr><th width="40%">Индикатор поведения</th><th>Уч. 1</th><th>Уч. 2</th><th>Уч. 3</th><th>Уч. 4</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1. Задаёт вопросы "Почему?"</strong><br><small>В: нет | У: повторяет | И: задаёт сам | Э: уточняющие</small></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td></tr>
+              <tr><td><strong>2. Сравнивает объекты по признакам</strong><br><small>В: молчит | У: 1 признак | И: 2+ | Э: классификация</small></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td></tr>
+              <tr><td><strong>3. Предлагает оригинальные идеи</strong><br><small>В: копирует | У: 1 деталь | И: своя идея | Э: новое решение</small></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h4 style="margin-top:20px;">💬 Коммуникация и 🤝 Кооперация</h4>
+        <div class="table-container">
+          <table>
+            <thead><tr><th width="40%">Индикатор поведения</th><th>Уч. 1</th><th>Уч. 2</th><th>Уч. 3</th><th>Уч. 4</th></tr></thead>
+            <tbody>
+              <tr><td><strong>4. Инициирует общение на английском</strong><br><small>В: молчит | У: когда спросят | И: сам начинает | Э: вовлекает</small></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td></tr>
+              <tr><td><strong>5. Берёт активную роль в группе</strong><br><small>В: ждёт | У: выполняет | И: распределяет | Э: координирует</small></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top:15px;"><strong>📝 Общие наблюдения:</strong><textarea placeholder="Запишите важные моменты урока, неожиданные реакции, контекст..."></textarea></div>
+      </section>
+
+      <section class="stage-block">
+        <h3 class="stage-title" style="background: linear-gradient(135deg, var(--primary), var(--secondary));">3. Анкета самооценки ученика</h3>
+        <div style="background:#fdf5e0; border-left:4px solid #c8a030; padding:16px; margin:18px 0; border-radius:0 8px 8px 0;"><strong>Учителю:</strong> Читайте вопросы вслух для 2 класса. Заполнение: 5-7 минут в конце урока.</div>
+        <div class="table-container" style="margin-bottom:20px;">
+          <table><tr><td width="15%"><strong>Имя:</strong></td><td width="35%"><input type="text"></td><td width="15%"><strong>Тема:</strong></td><td width="35%"><input type="text"></td></tr></table>
+        </div>
+        <h4>😊 Мои чувства на уроке</h4>
+        <div style="margin-bottom:20px;">
+          <p><strong>1. Как я себя чувствовал на уроке?</strong></p>
+          <div class="rating-scale">
+            <label class="rating-option"><input type="radio" name="feel"> 😞<br>Грустно</label>
+            <label class="rating-option"><input type="radio" name="feel"> 😐<br>Так себе</label>
+            <label class="rating-option"><input type="radio" name="feel"> 🙂<br>Хорошо</label>
+            <label class="rating-option"><input type="radio" name="feel"> 😃<br>Отлично!</label>
+          </div>
+        </div>
+        <h4>🌟 Что я делал на уроке</h4>
+        <div class="table-container">
+          <table>
+            <thead><tr><th width="55%">Я сегодня...</th><th width="15%" style="text-align:center;">Да ✓</th><th width="15%" style="text-align:center;">Немного</th><th width="15%" style="text-align:center;">Нет</th></tr></thead>
+            <tbody>
+              <tr><td>Слушал учителя и одноклассников</td><td align="center"><input type="radio" name="q1"></td><td align="center"><input type="radio" name="q1"></td><td align="center"><input type="radio" name="q1"></td></tr>
+              <tr><td>Говорил на английском языке</td><td align="center"><input type="radio" name="q2"></td><td align="center"><input type="radio" name="q2"></td><td align="center"><input type="radio" name="q2"></td></tr>
+              <tr><td>Задавал вопросы, когда не понимал</td><td align="center"><input type="radio" name="q3"></td><td align="center"><input type="radio" name="q3"></td><td align="center"><input type="radio" name="q3"></td></tr>
+              <tr><td>Помогал своему партнёру</td><td align="center"><input type="radio" name="q4"></td><td align="center"><input type="radio" name="q4"></td><td align="center"><input type="radio" name="q4"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top:20px;">
+          <p><strong>Сегодня я узнал новое слово:</strong></p><input type="text" placeholder="Например: elephant">
+          <p style="margin-top:10px;"><strong>Что мне понравилось больше всего?</strong></p>
+          <textarea rows="2" placeholder="Напиши или нарисуй..."></textarea>
+        </div>
+      </section>
+
+      <section class="stage-block">
+        <h3 class="stage-title" style="background: linear-gradient(135deg, var(--primary), var(--secondary));">4. Протокол рефлексии педагога</h3>
+        <div style="background:#f9ede0; border-left:4px solid var(--accent); padding:16px; margin:18px 0; border-radius:0 8px 8px 0;"><strong>Назначение:</strong> Заполняется после урока (10-15 мин) для анализа эффективности методических решений.</div>
+        <h4>📋 Анализ структуры урока (модель 5E)</h4>
+        <div class="table-container">
+          <table>
+            <thead><tr><th width="15%">Этап 5E</th><th width="15%">Время</th><th width="35%">Что сработало хорошо</th><th width="35%">Что требует корректировки</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Engage</strong></td><td><input type="text" placeholder="план/факт"></td><td><input type="text"></td><td><input type="text"></td></tr>
+              <tr><td><strong>Explore</strong></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+              <tr><td><strong>Elaborate</strong></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h4 style="margin-top:20px;">🎯 Оценка достижения целей</h4>
+        <div style="margin-bottom:15px;">
+          <p><strong>Языковая цель урока достигнута:</strong></p>
+          <div class="rating-scale">
+            <label class="rating-option"><input type="radio" name="lg"> Не достигнута</label>
+            <label class="rating-option"><input type="radio" name="lg"> Частично</label>
+            <label class="rating-option"><input type="radio" name="lg"> В основном</label>
+            <label class="rating-option"><input type="radio" name="lg"> Полностью</label>
+          </div>
+        </div>
+        <div>
+          <p><strong>Компетентностная цель (4К) достигнута:</strong></p>
+          <div class="rating-scale">
+            <label class="rating-option"><input type="radio" name="cg"> Не достигнута</label>
+            <label class="rating-option"><input type="radio" name="cg"> Частично</label>
+            <label class="rating-option"><input type="radio" name="cg"> В основном</label>
+            <label class="rating-option"><input type="radio" name="cg"> Полностью</label>
+          </div>
+        </div>
+        <div style="margin-top:20px;">
+          <strong>Лучший момент урока:</strong>
+          <textarea rows="2" placeholder="Опишите ситуацию..."></textarea>
+          <strong style="display:block; margin-top:10px;">План индивидуальной поддержки:</strong>
+          <textarea rows="2" placeholder="Конкретные шаги: доп. материалы, скаффолдинг..."></textarea>
+        </div>
+      </section>
+
+      <section class="stage-block">
+        <h3 class="stage-title" style="background: linear-gradient(135deg, var(--primary), var(--secondary));">5. Сводный профиль класса</h3>
+        <div style="background:#f9ede0; border-left:4px solid var(--accent); padding:16px; margin:18px 0; border-radius:0 8px 8px 0;"><strong>Назначение:</strong> Отслеживание динамики всего класса. Заполняется ежемесячно.</div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr><th rowspan="2" width="5%">№</th><th rowspan="2" width="25%">Имя ученика</th><th colspan="4" style="text-align:center;">4К-компетенции (уровень)</th><th rowspan="2" width="20%">Примечания</th></tr>
+              <tr><th style="text-align:center;">🧠</th><th style="text-align:center;">💡</th><th style="text-align:center;">💬</th><th style="text-align:center;">🤝</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td><input type="text"></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><input type="text"></td></tr>
+              <tr><td>2</td><td><input type="text"></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><input type="text"></td></tr>
+              <tr><td>3</td><td><input type="text"></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><select><option>-</option><option>В</option><option>У</option><option>И</option><option>Э</option></select></td>
+                <td><input type="text"></td></tr>
+              <tr><td colspan="7" style="text-align:center; padding:10px; background:var(--beige); font-style:italic; color:var(--text-light); font-size:0.85rem;">Добавьте строки для остальных учеников...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h4 style="margin-top:20px;">🎯 Групповой анализ</h4>
+        <div class="table-container">
+          <table>
+            <tbody>
+              <tr><td width="40%"><strong>Сильные стороны класса:</strong></td><td><textarea rows="2" placeholder="Например: высокий уровень кооперации..."></textarea></td></tr>
+              <tr><td><strong>Зоны роста:</strong></td><td><textarea rows="2" placeholder="Например: мало кто обосновывает свой выбор..."></textarea></td></tr>
+              <tr><td><strong>Приоритет на следующий месяц:</strong></td><td><select><option>Критическое мышление</option><option>Креативность</option><option>Коммуникация</option><option>Кооперация</option></select></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </article>
+
+  </div><!-- .main-container -->
+
+  <!-- Modal -->
+  <div id="imageModal" class="modal" onclick="closeModal()">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content" id="modalImage">
+  </div>
+
+  <script>
+    function openTab(evt, tabName) {
+      document.querySelectorAll('.tab-content').forEach(el => {
+        el.style.display = 'none';
+        el.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-link').forEach(el => el.classList.remove('active'));
+      const tab = document.getElementById(tabName);
+      if (tab) {
+        tab.style.display = 'block';
+        tab.classList.add('active');
+      }
+      evt.currentTarget.classList.add('active');
+      window.scrollTo({ top: 180, behavior: 'smooth' });
+    }
+
+    function generatePDF(event, elementId, fileName) {
+      event.preventDefault();
+      const element = document.getElementById(elementId);
+      if (!element) return;
+      const opt = {
+        margin: 10,
+        filename: fileName,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+
+    function openModal(imageSrc) {
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalImage');
+      modal.style.display = 'flex';
+      modalImg.src = imageSrc;
+    }
+
+    function closeModal() {
+      document.getElementById('imageModal').style.display = 'none';
+    }
+
+    function printMaterials(galleryId) {
+      const gallery = document.getElementById(galleryId);
+      if (!gallery) return;
+      const images = gallery.getElementsByTagName('img');
+      const printWindow = window.open('', '_blank');
+      let html = '<html><head><title>Печать материалов</title>';
+      html += '<style>body{margin:0;padding:0;background:#fff;text-align:center;}';
+      html += '@media print{@page{margin:1cm;}img{max-width:100%;max-height:25cm;object-fit:contain;page-break-after:always;}img:last-child{page-break-after:auto;}}';
+      html += 'img{max-width:100%;margin-bottom:20px;}</style></head><body>';
+      for (let i = 0; i < images.length; i++) {
+        html += '<img src="' + images[i].src + '">';
+      }
+      html += '</body></html>';
+      printWindow.document.write(html);
+      printWindow.document.close();
+      setTimeout(() => { printWindow.focus(); printWindow.print(); }, 1000);
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  </script>
+</body>
+</html>
